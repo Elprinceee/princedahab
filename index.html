@@ -850,17 +850,19 @@
   }
 
   // --- التنقل بين التبويبات ---
-  function tab(n) {
+  function tab(n, keep) {
     cur = n;
     say('');
-    editPropId = '';
-    editBkId = '';
-    payBkId = '';
-    fixPayBkId = '';
-    earlyBkId = '';
-    confirmDelPropId = '';
-    confirmDelBkId = '';
-    confirmCancelBkId = '';
+    if (!keep) {
+      editPropId = '';
+      editBkId = '';
+      payBkId = '';
+      fixPayBkId = '';
+      earlyBkId = '';
+      confirmDelPropId = '';
+      confirmDelBkId = '';
+      confirmCancelBkId = '';
+    }
     for (var i = 0; i <= 5; i++) {
       var btn = $('t' + i);
       if (btn) btn.className = (i === n ? 'on' : '');
@@ -900,13 +902,13 @@
           '<input id="ep_gd" placeholder="مثال: كود البوابة 1234 - واي فاي: Villa_Net" value="' + esc(p.guide || '') + '">' +
           '<div class="r" style="margin-top:8px">' +
             '<button class="b sm" onclick="savePropEdit(\'' + p.id + '\')">حفظ التعديل</button>' +
-            '<button class="b sec sm" onclick="editPropId=\'\';tab(0)">إلغاء</button>' +
+            '<button class="b sec sm" onclick="editPropId=\'\';tab(0,1)">إلغاء</button>' +
           '</div>' +
         '</div>';
       }
 
       var delConfirmHtml = confirmDelPropId === p.id
-        ? '<div class="inline-panel"><div class="m" style="margin-bottom:8px">هل أنت متأكد من حذف <b>' + esc(p.name) + '</b>؟</div><div style="display:flex;gap:8px"><button class="b g sm" onclick="confirmDeleteProp(\'' + p.id + '\')">نعم، احذف</button><button class="b sec sm" onclick="confirmDelPropId=\'\';tab(0)">تراجع</button></div></div>'
+        ? '<div class="inline-panel"><div class="m" style="margin-bottom:8px">هل أنت متأكد من حذف <b>' + esc(p.name) + '</b>؟</div><div style="display:flex;gap:8px"><button class="b g sm" onclick="confirmDeleteProp(\'' + p.id + '\')">نعم، احذف</button><button class="b sec sm" onclick="confirmDelPropId=\'\';tab(0,1)">تراجع</button></div></div>'
         : '';
 
       return '<div class="c">' +
@@ -920,9 +922,9 @@
           '<div style="display:flex;gap:6px;flex-wrap:wrap">' +
             '<button class="b sm" onclick="goBook(\'' + p.id + '\')">➕ احجز</button>' +
             '<button class="b sec sm" onclick="cp=\'' + p.id + '\';tab(3)">📅 التقويم</button>' +
-            '<button class="b sec sm" onclick="editPropId=\'' + p.id + '\';tab(0)">✏️ تعديل</button>' +
+            '<button class="b sec sm" onclick="editPropId=\'' + p.id + '\';tab(0,1)">✏️ تعديل</button>' +
           '</div>' +
-          '<button class="b g sm" onclick="confirmDelPropId=\'' + p.id + '\';tab(0)">حذف</button>' +
+          '<button class="b g sm" onclick="confirmDelPropId=\'' + p.id + '\';tab(0,1)">حذف</button>' +
         '</div>' +
         delConfirmHtml +
       '</div>';
@@ -1240,7 +1242,7 @@
           '</div>' +
           '<div class="r" style="margin-top:6px">' +
             '<button class="b sm" onclick="saveBookingEdit(\'' + b.id + '\')">حفظ التعديلات</button>' +
-            '<button class="b sec sm" onclick="editBkId=\'\';tab(2)">إلغاء</button>' +
+            '<button class="b sec sm" onclick="editBkId=\'\';tab(2,1)">إلغاء</button>' +
           '</div>' +
         '</div>';
       }
@@ -1257,7 +1259,7 @@
           '<div style="display:flex;gap:8px;align-items:center">' +
             '<input id="partAmt_' + b.id + '" type="number" inputmode="numeric" placeholder="المبلغ المدفوع" style="margin:0">' +
             '<button class="b sec sm" onclick="payPartialRemaining(\'' + b.id + '\')">تسجيل الجزء</button>' +
-            '<button class="b g sm" onclick="payBkId=\'\';tab(2)">إغلاق</button>' +
+            '<button class="b g sm" onclick="payBkId=\'\';tab(2,1)">إغلاق</button>' +
           '</div>' +
         '</div>';
       }
@@ -1271,7 +1273,7 @@
           '<div style="display:flex;gap:8px;align-items:center">' +
             '<input id="fixAmt_' + b.id + '" type="number" inputmode="numeric" value="' + (b.dep || 0) + '" style="margin:0">' +
             '<button class="b sm" onclick="saveFixedPayment(\'' + b.id + '\')">حفظ التصحيح</button>' +
-            '<button class="b g sm" onclick="fixPayBkId=\'\';tab(2)">إغلاق</button>' +
+            '<button class="b g sm" onclick="fixPayBkId=\'\';tab(2,1)">إغلاق</button>' +
           '</div>' +
         '</div>';
       }
@@ -1288,7 +1290,7 @@
           '<div style="display:flex;gap:6px;flex-wrap:wrap">' +
             '<button class="b sm" onclick="confirmEarlyCheckout(\'' + b.id + '\', false)">مغادرة مع بقاء الإجمالي (' + fmt(b.total) + ')</button>' +
             '<button class="b warn sm" onclick="confirmEarlyCheckout(\'' + b.id + '\', true)">مغادرة وحساب ' + actualNights + ' ليلة فقط (' + fmt(reducedTotal) + ')</button>' +
-            '<button class="b sec sm" onclick="earlyBkId=\'\';tab(2)">تراجع</button>' +
+            '<button class="b sec sm" onclick="earlyBkId=\'\';tab(2,1)">تراجع</button>' +
           '</div>' +
         '</div>';
       }
@@ -1300,7 +1302,7 @@
           '<div class="m" style="margin-bottom:8px">هل تريد إلغاء حجز <b>' + esc(b.name) + '</b>؟</div>' +
           '<div style="display:flex;gap:8px">' +
             '<button class="b g sm" onclick="cancelBooking(\'' + b.id + '\')">نعم، إلغاء الحجز</button>' +
-            '<button class="b sec sm" onclick="confirmCancelBkId=\'\';tab(2)">تراجع</button>' +
+            '<button class="b sec sm" onclick="confirmCancelBkId=\'\';tab(2,1)">تراجع</button>' +
           '</div>' +
         '</div>';
       }
@@ -1309,11 +1311,11 @@
       var cancelledActions = '';
       if (isCancelled) {
         if (confirmDelBkId === b.id) {
-          cancelledActions = '<div class="inline-panel"><div class="m" style="margin-bottom:8px">حذف هذا الحجز الملغي نهائياً؟</div><div style="display:flex;gap:8px"><button class="b g sm" onclick="deleteBookingForever(\'' + b.id + '\')">نعم، حذف نهائي</button><button class="b sec sm" onclick="confirmDelBkId=\'\';tab(2)">تراجع</button></div></div>';
+          cancelledActions = '<div class="inline-panel"><div class="m" style="margin-bottom:8px">حذف هذا الحجز الملغي نهائياً؟</div><div style="display:flex;gap:8px"><button class="b g sm" onclick="deleteBookingForever(\'' + b.id + '\')">نعم، حذف نهائي</button><button class="b sec sm" onclick="confirmDelBkId=\'\';tab(2,1)">تراجع</button></div></div>';
         } else {
           cancelledActions = '<div class="r" style="margin-top:10px">' +
             '<button class="b sm" onclick="restoreBooking(\'' + b.id + '\')">🔄 إعادة تفعيل الحجز</button>' +
-            '<button class="b g sm" onclick="confirmDelBkId=\'' + b.id + '\';tab(2)">🗑️ حذف نهائي</button>' +
+            '<button class="b g sm" onclick="confirmDelBkId=\'' + b.id + '\';tab(2,1)">🗑️ حذف نهائي</button>' +
           '</div>';
         }
       }
@@ -1323,14 +1325,14 @@
       var actionsHtml = isCancelled ? cancelledActions : (
         '<div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:10px">' +
           '<button class="b sm" onclick="openReceipt(\'' + b.id + '\')">🧾 وصل / واتساب</button>' +
-          (rem > 0 ? '<button class="b warn sm" onclick="payBkId=\'' + b.id + '\';fixPayBkId=\'\';tab(2)">💰 سداد المتبقي</button>' : '') +
-          ((b.dep || 0) > 0 ? '<button class="b sec sm" onclick="fixPayBkId=\'' + b.id + '\';payBkId=\'\';tab(2)">↩️ تعديل الدفع</button>' : '') +
+          (rem > 0 ? '<button class="b warn sm" onclick="payBkId=\'' + b.id + '\';fixPayBkId=\'\';tab(2,1)">💰 سداد المتبقي</button>' : '') +
+          ((b.dep || 0) > 0 ? '<button class="b sec sm" onclick="fixPayBkId=\'' + b.id + '\';payBkId=\'\';tab(2,1)">↩️ تعديل الدفع</button>' : '') +
           ((b.sec && !b.secRet) ? '<button class="b sec sm" onclick="returnSecurityDeposit(\'' + b.id + '\')">🔐 رد التأمين (' + fmt(b.sec) + ')</button>' : '') +
-          (canEarlyCheckout ? '<button class="b sec sm" onclick="earlyBkId=\'' + b.id + '\';tab(2)">🚪 مغادرة مبكرة</button>' : '') +
+          (canEarlyCheckout ? '<button class="b sec sm" onclick="earlyBkId=\'' + b.id + '\';tab(2,1)">🚪 مغادرة مبكرة</button>' : '') +
           '<a class="b sec sm" href="' + buildReminderWhatsApp(b) + '" target="_blank" rel="noopener">💬 تذكير</a>' +
           ((propObj && (propObj.mapUrl || propObj.guide)) ? '<a class="b sec sm" href="' + buildGuideWhatsApp(b, propObj) + '" target="_blank" rel="noopener">📍 اللوكيشن</a>' : '') +
-          '<button class="b sec sm" onclick="editBkId=\'' + b.id + '\';tab(2)">✏️ تعديل</button>' +
-          '<button class="b g sm" onclick="confirmCancelBkId=\'' + b.id + '\';tab(2)">إلغاء الحجز</button>' +
+          '<button class="b sec sm" onclick="editBkId=\'' + b.id + '\';tab(2,1)">✏️ تعديل</button>' +
+          '<button class="b g sm" onclick="confirmCancelBkId=\'' + b.id + '\';tab(2,1)">إلغاء الحجز</button>' +
         '</div>'
       );
 
