@@ -1,0 +1,2120 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#0f766e">
+  <link rel="manifest" href="manifest.json">
+  <link rel="apple-touch-icon" href="icon-192.png">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <title>حجوزات الفلل والشقق</title>
+  <style>
+    :root {
+      --bg: #f6f4ef;
+      --card: #ffffff;
+      --tx: #1d2a26;
+      --mut: #6b7a74;
+      --ac: #0f766e;
+      --ac-hover: #0d635c;
+      --acx: #ffffff;
+      --bd: #e3dfd6;
+      --er: #b42318;
+      --ok-bg: rgba(15, 118, 110, 0.12);
+      --er-bg: rgba(180, 35, 24, 0.12);
+      --warn-bg: rgba(217, 119, 6, 0.13);
+      --warn: #b45309;
+      box-sizing: border-box;
+      padding-top: env(safe-area-inset-top, 0px);
+      padding-bottom: env(safe-area-inset-bottom, 0px);
+    }
+
+    @media (prefers-color-scheme: dark) {
+      :root:not([data-theme="light"]) {
+        --bg: #111a17;
+        --card: #1a2622;
+        --tx: #eef3f0;
+        --mut: #93a39c;
+        --ac: #2dd4bf;
+        --ac-hover: #14b8a6;
+        --acx: #06201b;
+        --bd: #2a3a35;
+        --er: #f97066;
+        --ok-bg: rgba(45, 212, 191, 0.16);
+        --er-bg: rgba(249, 112, 102, 0.16);
+        --warn-bg: rgba(251, 191, 36, 0.15);
+        --warn: #fbbf24;
+      }
+    }
+
+    :root[data-theme="dark"] {
+      --bg: #111a17;
+      --card: #1a2622;
+      --tx: #eef3f0;
+      --mut: #93a39c;
+      --ac: #2dd4bf;
+      --ac-hover: #14b8a6;
+      --acx: #06201b;
+      --bd: #2a3a35;
+      --er: #f97066;
+      --ok-bg: rgba(45, 212, 191, 0.16);
+      --er-bg: rgba(249, 112, 102, 0.16);
+      --warn-bg: rgba(251, 191, 36, 0.15);
+      --warn: #fbbf24;
+    }
+
+    * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--tx);
+      font-family: system-ui, -apple-system, "Segoe UI", Tahoma, sans-serif;
+      line-height: 1.5;
+      transition: background-color 0.2s ease, color 0.2s ease;
+    }
+
+    .w { max-width: 680px; margin: 0 auto; padding: 16px; padding-bottom: 44px; }
+
+    .topbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin: 4px 0 14px;
+      gap: 10px;
+    }
+
+    h1 { font-size: 20px; margin: 0; display: flex; align-items: center; gap: 8px; }
+
+    .icon-btn {
+      background: var(--card);
+      border: 1px solid var(--bd);
+      color: var(--tx);
+      border-radius: 10px;
+      padding: 8px 11px;
+      font: inherit;
+      font-size: 14px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .tabs {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 6px;
+      margin-bottom: 14px;
+    }
+
+    .tabs button {
+      padding: 10px 4px;
+      border: 1px solid var(--bd);
+      background: var(--card);
+      color: var(--tx);
+      border-radius: 10px;
+      font: inherit;
+      font-size: 13px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+
+    .tabs button.on {
+      background: var(--ac);
+      color: var(--acx);
+      border-color: var(--ac);
+      font-weight: 700;
+    }
+
+    .c {
+      background: var(--card);
+      border: 1px solid var(--bd);
+      border-radius: 14px;
+      padding: 14px;
+      margin-bottom: 12px;
+    }
+
+    .r { display: flex; justify-content: space-between; align-items: center; gap: 8px; flex-wrap: wrap; }
+    .m { color: var(--mut); font-size: 13.5px; }
+
+    .b {
+      padding: 9px 14px;
+      border: 0;
+      border-radius: 9px;
+      background: var(--ac);
+      color: var(--acx);
+      font: inherit;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      text-decoration: none;
+    }
+
+    .b:hover { background: var(--ac-hover); }
+    .b.g { background: transparent; color: var(--er); border: 1px solid var(--bd); font-weight: 500; }
+    .b.sec { background: transparent; color: var(--tx); border: 1px solid var(--bd); font-weight: 500; }
+    .b.warn { background: var(--warn-bg); color: var(--warn); border: 1px solid var(--bd); }
+    .b.sm { padding: 7px 11px; font-size: 13px; }
+    .b.full { width: 100%; }
+
+    input, select, textarea {
+      width: 100%;
+      padding: 10px 12px;
+      margin: 4px 0 10px;
+      border: 1px solid var(--bd);
+      border-radius: 9px;
+      background: var(--bg);
+      color: var(--tx);
+      font: inherit;
+      font-size: 15px;
+    }
+
+    input:focus, select:focus, textarea:focus { outline: 2px solid var(--ac); outline-offset: -1px; }
+
+    label { font-size: 13px; color: var(--mut); display: block; margin-top: 2px; }
+    .g2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+
+    .msg { padding: 11px 13px; border-radius: 10px; margin-bottom: 12px; font-size: 14px; font-weight: 500; }
+    .ok { background: var(--ok-bg); color: var(--ac); border: 1px solid var(--ac); }
+    .er { background: var(--er-bg); color: var(--er); border: 1px solid var(--er); }
+
+    .alert-strip {
+      background: var(--warn-bg);
+      border: 1px solid var(--warn);
+      color: var(--tx);
+      border-radius: 12px;
+      padding: 10px 12px;
+      margin-bottom: 12px;
+      font-size: 13px;
+    }
+    .alert-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 8px;
+      padding: 4px 0;
+    }
+    .alert-row + .alert-row { border-top: 1px dashed var(--bd); margin-top: 4px; padding-top: 6px; }
+
+    .tag {
+      font-size: 12px;
+      padding: 3px 9px;
+      border-radius: 99px;
+      border: 1px solid var(--bd);
+      color: var(--mut);
+      background: var(--bg);
+    }
+    .tag.ok-tag { color: var(--ac); border-color: var(--ac); background: var(--ok-bg); font-weight: 600; }
+    .tag.busy-tag { color: var(--er); border-color: var(--er); background: var(--er-bg); font-weight: 600; }
+    .tag.warn-tag { color: var(--warn); border-color: var(--warn); background: var(--warn-bg); font-weight: 600; }
+
+    .avail-box {
+      margin-top: 8px;
+      padding: 8px 10px;
+      border-radius: 9px;
+      font-size: 13px;
+      background: var(--bg);
+      border: 1px solid var(--bd);
+    }
+
+    .x { opacity: 0.65; }
+    .x .rg, .x b.pn-title { text-decoration: line-through; }
+
+    .cal { display: grid; grid-template-columns: repeat(7, 1fr); gap: 5px; margin-top: 10px; text-align: center; }
+    .cal div {
+      padding: 10px 0;
+      border-radius: 9px;
+      font-size: 14px;
+      border: 1px solid var(--bd);
+      cursor: pointer;
+      user-select: none;
+    }
+    .cal .h { border: 0; color: var(--mut); font-size: 12px; cursor: default; padding: 4px 0; font-weight: 600; }
+    .cal .e { border: 0; cursor: default; }
+    .cal .bk { background: var(--ac); color: var(--acx); border-color: var(--ac); font-weight: 700; }
+    .cal .td { outline: 2px solid var(--er); outline-offset: -2px; font-weight: 700; }
+
+    .k { display: flex; justify-content: space-between; gap: 10px; padding: 6px 0; border-top: 1px dashed var(--bd); font-size: 14px; }
+    .k span { color: var(--mut); }
+    .rg { font-weight: 600; margin: 8px 0 6px; color: var(--ac); font-size: 14.5px; }
+
+    .filter-pills { display: flex; gap: 6px; margin-bottom: 10px; flex-wrap: wrap; }
+    .pill {
+      padding: 6px 12px;
+      border-radius: 99px;
+      border: 1px solid var(--bd);
+      background: var(--card);
+      color: var(--tx);
+      font: inherit;
+      font-size: 12.5px;
+      cursor: pointer;
+    }
+    .pill.on { background: var(--ac); color: var(--acx); border-color: var(--ac); font-weight: 600; }
+
+    .calc-box {
+      background: var(--bg);
+      border: 1px dashed var(--bd);
+      border-radius: 10px;
+      padding: 10px 12px;
+      margin-bottom: 12px;
+      font-size: 13.5px;
+    }
+
+    .inline-panel {
+      margin-top: 10px;
+      padding: 10px;
+      border-radius: 10px;
+      background: var(--bg);
+      border: 1px solid var(--bd);
+    }
+
+    .tl-wrap { overflow-x: auto; margin-top: 10px; border: 1px solid var(--bd); border-radius: 10px; }
+    .tl-table { width: 100%; border-collapse: collapse; font-size: 12.5px; min-width: 520px; }
+    .tl-table th, .tl-table td { border: 1px solid var(--bd); padding: 7px 5px; text-align: center; }
+    .tl-table th { background: var(--bg); color: var(--mut); font-weight: 600; }
+    .tl-prop { text-align: right !important; font-weight: 600; white-space: nowrap; background: var(--card); }
+    .tl-busy { background: var(--ac); color: var(--acx); font-weight: 600; cursor: pointer; }
+    .tl-free { background: transparent; color: var(--mut); cursor: pointer; }
+  </style>
+</head>
+<body>
+<div class="w">
+  <div class="topbar">
+    <h1 id="appHeaderTitle">🏡 حجوزات الفلل والشقق</h1>
+    <div style="display:flex;gap:6px">
+      <button class="icon-btn" id="settingsBtn" onclick="toggleSettingsPanel()" title="الإعدادات والنسخ الاحتياطي">⚙️</button>
+      <button class="icon-btn" id="themeBtn" onclick="toggleTheme()" title="تبديل المظهر">🌙</button>
+    </div>
+  </div>
+
+  <!-- لوحة الإعدادات والمزامنة والنسخ الاحتياطي -->
+  <div id="settingsBox" class="c" style="display:none;border-color:var(--ac)">
+    <div class="r" style="margin-bottom:8px">
+      <b>⚙️ إعدادات البرنامج والحماية</b>
+      <button class="b sec sm" onclick="toggleSettingsPanel(false)">إغلاق ✕</button>
+    </div>
+    <label>عنوان البرنامج الرئيسي (يظهر في الأعلى)</label>
+    <input id="appTitleInput" placeholder="مثال: 🏡 حجوزات الفلل والشقق" oninput="previewAppTitle(this.value)">
+    <div style="display:flex;gap:8px;margin-top:4px;flex-wrap:wrap">
+      <button class="b sm" onclick="saveAppTitle()">حفظ العنوان</button>
+      <button class="b sec sm" onclick="resetAppTitle()">إعادة الافتراضي</button>
+    </div>
+
+    <div style="margin-top:12px;padding-top:10px;border-top:1px dashed var(--bd)">
+      <b>☁️ المزامنة السحابية الفورية (Firebase - اختياري)</b>
+      <div class="m" style="font-size:12px;margin:4px 0 8px">اربط قاعدة بيانات Firebase Realtime مجانية لحفظ بياناتك على السحابة تلقائياً وفتحها من أي هاتف أو كمبيوتر.</div>
+      <label>رابط قاعدة البيانات (Firebase Realtime DB URL)</label>
+      <input id="cloudUrlInput" dir="ltr" placeholder="https://your-project-default-rtdb.firebaseio.com" onchange="saveCloudConfig()">
+      <label>رمز المزامنة السري الخاص بك (Sync Code)</label>
+      <input id="cloudKeyInput" dir="ltr" placeholder="مثال: elprince_2026" onchange="saveCloudConfig()">
+      <div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:4px">
+        <button class="b sm" onclick="syncCloudPush(true)">⬆️ رفع للسحابة الآن</button>
+        <button class="b sec sm" onclick="syncCloudPull(true)">⬇️ جلب من السحابة</button>
+      </div>
+      <div id="cloudStatus" class="m" style="font-size:12px;margin-top:6px"></div>
+    </div>
+
+    <div style="margin-top:12px;padding-top:10px;border-top:1px dashed var(--bd)">
+      <b>💾 النسخ الاحتياطي الأوفلاين (بدون إنترنت)</b>
+      <div id="backupStatusText" class="m" style="font-size:12px;margin:4px 0 8px"></div>
+      <div style="display:flex;gap:6px;flex-wrap:wrap">
+        <button class="b sm" onclick="exportData()">⬇️ حفظ ملف النسخة</button>
+        <button class="b sec sm" onclick="shareBackupFile()">📤 إرسال لنفسي واتساب / Drive</button>
+        <button class="b sec sm" onclick="$('impFileSettings').click()">⬆️ استيراد نسخة</button>
+        <input id="impFileSettings" type="file" accept=".json,application/json" style="display:none" onchange="importData(this)">
+      </div>
+    </div>
+
+    <div class="m" style="font-size:12px;margin-top:10px;padding-top:8px;border-top:1px dashed var(--bd)">
+      📱 <b>للتثبيت:</b> أندرويد (Chrome): ⋮ ← <b>"تثبيت التطبيق"</b> · آيفون (Safari): زر المشاركة ← <b>"إضافة إلى الشاشة الرئيسية"</b>. ⚠️ لا تمسح بيانات المتصفح، وخد نسخة احتياطية أو فعّل السحابة.
+    </div>
+  </div>
+
+  <div id="todayAlerts"></div>
+
+  <div class="tabs">
+    <button id="t0" onclick="tab(0)">🏡 العقارات</button>
+    <button id="t1" onclick="tab(1)">➕ حجز جديد</button>
+    <button id="t2" onclick="tab(2)">📋 الحجوزات</button>
+    <button id="t3" onclick="tab(3)">📅 التقويم</button>
+    <button id="t4" onclick="tab(4)">🧾 وصل سريع</button>
+    <button id="t5" onclick="tab(5)">💰 الحسابات</button>
+  </div>
+
+  <div id="msg"></div>
+  <div id="v"></div>
+</div>
+
+<script>
+  var STORAGE_KEY = 'booking_v1';
+  var THEME_KEY = 'booking_theme_v1';
+  var CLOUD_KEY = 'booking_cloud_cfg_v1';
+  var BACKUP_TS_KEY = 'booking_last_backup_v1';
+  var DEFAULT_TITLE = '🏡 حجوزات الفلل والشقق';
+
+  var S = { biz: '', host: '', appTitle: DEFAULT_TITLE, props: [], bk: [], exp: [] };
+  var cloudCfg = { url: '', code: '' };
+  var cloudTimer = null;
+
+  var cur = 0;
+  var sel = '';
+  var pf = '';
+  var cp = '';
+  var cm = new Date().getFullYear() * 12 + new Date().getMonth();
+  var calMode = 'single';
+  var tlStart = '';
+  var bkFilter = 'all';
+  var editPropId = '';
+  var editBkId = '';
+  var payBkId = '';
+  var fixPayBkId = '';
+  var earlyBkId = '';
+  var confirmDelPropId = '';
+  var confirmDelBkId = '';
+  var confirmCancelBkId = '';
+  var quickReceiptData = null;
+
+  function $(id) { return document.getElementById(id); }
+
+  function esc(t) {
+    return String(t == null ? '' : t).replace(/[&<>"]/g, function(c) {
+      return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c];
+    });
+  }
+
+  function fmt(n) {
+    return (Number(n) || 0).toLocaleString('en-US');
+  }
+
+  function pd(n) {
+    return (n < 10 ? '0' : '') + n;
+  }
+
+  function todayStr() {
+    var t = new Date();
+    return t.getFullYear() + '-' + pd(t.getMonth() + 1) + '-' + pd(t.getDate());
+  }
+
+  function addDaysStr(ds, delta) {
+    var p = ds.split('-');
+    var d = new Date(+p[0], +p[1] - 1, +p[2] + delta);
+    return d.getFullYear() + '-' + pd(d.getMonth() + 1) + '-' + pd(d.getDate());
+  }
+
+  function say(t, isErr) {
+    var el = $('msg');
+    if (!el) return;
+    el.innerHTML = t ? '<div class="msg ' + (isErr ? 'er' : 'ok') + '">' + esc(t) + '</div>' : '';
+  }
+
+  // --- المظهر (ليلي / نهاري) ---
+  function initTheme() {
+    var saved = '';
+    try { saved = localStorage.getItem(THEME_KEY) || ''; } catch (e) {}
+    if (saved === 'dark' || saved === 'light') {
+      document.documentElement.setAttribute('data-theme', saved);
+    }
+    updateThemeBtn();
+  }
+
+  function toggleTheme() {
+    var isDark = document.documentElement.getAttribute('data-theme') === 'dark' ||
+      (!document.documentElement.getAttribute('data-theme') && window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches);
+    var next = isDark ? 'light' : 'dark';
+    document.documentElement.setAttribute('data-theme', next);
+    try { localStorage.setItem(THEME_KEY, next); } catch (e) {}
+    updateThemeBtn();
+  }
+
+  function updateThemeBtn() {
+    var btn = $('themeBtn');
+    if (!btn) return;
+    var isDark = document.documentElement.getAttribute('data-theme') === 'dark' ||
+      (!document.documentElement.getAttribute('data-theme') && window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches);
+    btn.textContent = isDark ? '☀️' : '🌙';
+  }
+
+  // --- حفظ واسترجاع البيانات ---
+  function loadState() {
+    var hadSaved = false;
+    try {
+      var raw = localStorage.getItem(STORAGE_KEY);
+      if (raw) {
+        var parsed = JSON.parse(raw);
+        if (parsed && typeof parsed === 'object') {
+          hadSaved = true;
+          S.biz = parsed.biz || '';
+          S.host = parsed.host || '';
+          S.appTitle = parsed.appTitle || DEFAULT_TITLE;
+          S.props = Array.isArray(parsed.props) ? parsed.props : [];
+          S.bk = Array.isArray(parsed.bk) ? parsed.bk : [];
+          S.exp = Array.isArray(parsed.exp) ? parsed.exp : [];
+        }
+      }
+    } catch (e) {}
+    if (!hadSaved && !S.props.length) {
+      S.props = [
+        { id: 'p1', name: 'فيلا الساحل', type: 'فيلا', price: 3500, city: 'الساحل الشمالي', host: '', mapUrl: '', guide: '' },
+        { id: 'p2', name: 'شقة التجمع', type: 'شقة', price: 900, city: 'القاهرة الجديدة', host: '', mapUrl: '', guide: '' }
+      ];
+    }
+    applyAppTitle();
+  }
+
+  function save() {
+    try {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(S));
+      scheduleCloudPush();
+    } catch (e) {
+      say('تعذر الحفظ التلقائي في المتصفح (تحقق من مساحة التخزين أو وضع التصفح الخاص)', true);
+    }
+  }
+
+  function requestPersistentStorage() {
+    try {
+      if (navigator.storage && navigator.storage.persist) {
+        navigator.storage.persist().catch(function() {});
+      }
+    } catch (e) {}
+  }
+
+  // --- العنوان والإعدادات ---
+  function applyAppTitle() {
+    var title = (S.appTitle && S.appTitle.trim()) ? S.appTitle.trim() : DEFAULT_TITLE;
+    if ($('appHeaderTitle')) $('appHeaderTitle').textContent = title;
+    document.title = title.replace(/^[^\w\u0600-\u06FF]+/, '').trim() || 'حجوزات الفلل والشقق';
+  }
+
+  function previewAppTitle(val) {
+    var title = val.trim() || DEFAULT_TITLE;
+    if ($('appHeaderTitle')) $('appHeaderTitle').textContent = title;
+  }
+
+  function saveAppTitle() {
+    var inp = $('appTitleInput');
+    S.appTitle = (inp && inp.value.trim()) ? inp.value.trim() : DEFAULT_TITLE;
+    applyAppTitle();
+    save();
+    say('تم حفظ عنوان البرنامج بنجاح ✅');
+  }
+
+  function resetAppTitle() {
+    S.appTitle = DEFAULT_TITLE;
+    if ($('appTitleInput')) $('appTitleInput').value = DEFAULT_TITLE;
+    applyAppTitle();
+    save();
+    say('تمت استعادة العنوان الافتراضي');
+  }
+
+  function toggleSettingsPanel(forceState) {
+    var box = $('settingsBox');
+    if (!box) return;
+    var show = typeof forceState === 'boolean' ? forceState : (box.style.display === 'none');
+    box.style.display = show ? 'block' : 'none';
+    if (show) {
+      if ($('appTitleInput')) $('appTitleInput').value = S.appTitle || DEFAULT_TITLE;
+      if ($('cloudUrlInput')) $('cloudUrlInput').value = cloudCfg.url || '';
+      if ($('cloudKeyInput')) $('cloudKeyInput').value = cloudCfg.code || '';
+      updateCloudStatus(cloudCfg.url && cloudCfg.code ? 'مربوط بالسحابة ✅ (' + cloudCfg.code + ')' : 'غير مربوط بالسحابة (يعمل أوفلاين حالياً)');
+      updateBackupStatusText();
+    }
+  }
+
+  // --- المزامنة السحابية (Firebase Realtime Database) ---
+  function loadCloudConfig() {
+    try {
+      var raw = localStorage.getItem(CLOUD_KEY);
+      if (raw) {
+        var c = JSON.parse(raw);
+        if (c && typeof c === 'object') {
+          cloudCfg.url = String(c.url || '').trim().replace(/\/+$/, '');
+          cloudCfg.code = String(c.code || '').trim().replace(/[^a-zA-Z0-9_-]/g, '');
+        }
+      }
+    } catch (e) {}
+  }
+
+  function saveCloudConfig() {
+    var u = $('cloudUrlInput') ? $('cloudUrlInput').value.trim().replace(/\/+$/, '') : '';
+    var k = $('cloudKeyInput') ? $('cloudKeyInput').value.trim().replace(/[^a-zA-Z0-9_-]/g, '') : '';
+    cloudCfg = { url: u, code: k };
+    try { localStorage.setItem(CLOUD_KEY, JSON.stringify(cloudCfg)); } catch (e) {}
+    updateCloudStatus(u && k ? 'جاهز للمزامنة التلقائية ✅' : 'غير مربوط بالسحابة (يعمل أوفلاين حالياً)');
+  }
+
+  function updateCloudStatus(txt, isErr) {
+    var el = $('cloudStatus');
+    if (!el) return;
+    el.style.color = isErr ? 'var(--er)' : 'var(--ac)';
+    el.textContent = txt;
+  }
+
+  function getCloudEndpoint() {
+    if (!cloudCfg.url || !cloudCfg.code) return '';
+    return cloudCfg.url + '/backups/' + encodeURIComponent(cloudCfg.code) + '.json';
+  }
+
+  function scheduleCloudPush() {
+    if (!cloudCfg.url || !cloudCfg.code) return;
+    if (cloudTimer) clearTimeout(cloudTimer);
+    cloudTimer = setTimeout(function() { syncCloudPush(false); }, 1200);
+  }
+
+  function syncCloudPush(manual) {
+    var ep = getCloudEndpoint();
+    if (!ep) {
+      if (manual) say('اكتب رابط قاعدة البيانات ورمز المزامنة السري الأول', true);
+      return;
+    }
+    updateCloudStatus('⏳ جاري الرفع للسحابة...');
+    fetch(ep, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ updatedAt: Date.now(), state: S })
+    }).then(function(res) {
+      if (!res.ok) throw new Error('HTTP ' + res.status);
+      var t = new Date().toLocaleTimeString('ar-EG', { hour: '2-digit', minute: '2-digit' });
+      updateCloudStatus('✅ تمت المزامنة السحابية بنجاح (' + t + ')');
+      if (manual) say('تم رفع بياناتك للسحابة بنجاح ☁️✅');
+    }).catch(function() {
+      updateCloudStatus('⚠️ تعذر الاتصال بالسحابة (البيانات محفوظة أوفلاين على جهازك)', true);
+      if (manual) say('تعذر الرفع للسحابة — تأكد من الإنترنت وصلاحيات رابط Firebase', true);
+    });
+  }
+
+  function syncCloudPull(manual) {
+    var ep = getCloudEndpoint();
+    if (!ep) {
+      if (manual) say('اكتب رابط قاعدة البيانات ورمز المزامنة السري الأول', true);
+      return;
+    }
+    if (manual && !confirm('هيتم استبدال بيانات الجهاز بنسخة السحابة. متأكد؟')) return;
+    updateCloudStatus('⏳ جاري جلب البيانات من السحابة...');
+    fetch(ep).then(function(res) {
+      if (!res.ok) throw new Error('HTTP ' + res.status);
+      return res.json();
+    }).then(function(data) {
+      if (!data || !data.state || !Array.isArray(data.state.props)) {
+        updateCloudStatus('لا توجد بيانات محفوظة لهذا الرمز على السحابة بعد');
+        if (manual) say('لا توجد نسخة سحابية لهذا الرمز بعد', true);
+        return;
+      }
+      var st = data.state;
+      S = {
+        biz: st.biz || '',
+        host: st.host || '',
+        appTitle: st.appTitle || DEFAULT_TITLE,
+        props: st.props,
+        bk: Array.isArray(st.bk) ? st.bk : [],
+        exp: Array.isArray(st.exp) ? st.exp : []
+      };
+      try { localStorage.setItem(STORAGE_KEY, JSON.stringify(S)); } catch (e) {}
+      applyAppTitle();
+      tab(cur);
+      updateCloudStatus('✅ تم استرجاع أحدث نسخة من السحابة');
+      if (manual) say('تم تحديث البيانات من السحابة بنجاح ☁️✅');
+    }).catch(function() {
+      updateCloudStatus('⚠️ تعذر جلب البيانات من السحابة', true);
+      if (manual) say('تعذر الاتصال بالسحابة — تأكد من الرابط والإنترنت', true);
+    });
+  }
+
+  // --- النسخ الاحتياطي الأوفلاين ---
+  function updateBackupStatusText() {
+    var el = $('backupStatusText');
+    if (!el) return;
+    var ts = 0;
+    try { ts = Number(localStorage.getItem(BACKUP_TS_KEY) || 0); } catch (e) {}
+    if (!ts) {
+      el.textContent = 'لم يتم أخذ نسخة احتياطية يدوية بعد — يُنصح بحفظ نسخة أو إرسالها لنفسك على واتساب.';
+      return;
+    }
+    var d = new Date(ts);
+    el.textContent = 'آخر نسخة احتياطية: ' + d.toLocaleDateString('ar-EG') + ' الساعة ' + d.toLocaleTimeString('ar-EG', { hour: '2-digit', minute: '2-digit' });
+  }
+
+  function exportData() {
+    try {
+      var blob = new Blob([JSON.stringify(S, null, 2)], { type: 'application/json' });
+      var url = URL.createObjectURL(blob);
+      var a = document.createElement('a');
+      a.href = url;
+      a.download = 'bookings-backup-' + todayStr() + '.json';
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+      try { localStorage.setItem(BACKUP_TS_KEY, String(Date.now())); } catch (e) {}
+      updateBackupStatusText();
+      renderTodayAlerts();
+      say('تم حفظ ملف النسخة الاحتياطية بنجاح ✅');
+    } catch (e) {
+      say('تعذر تصدير النسخة الاحتياطية', true);
+    }
+  }
+
+  function shareBackupFile() {
+    var filename = 'bookings-backup-' + todayStr() + '.json';
+    var jsonStr = JSON.stringify(S, null, 2);
+    try { localStorage.setItem(BACKUP_TS_KEY, String(Date.now())); } catch (e) {}
+    updateBackupStatusText();
+    renderTodayAlerts();
+    if (navigator.share) {
+      try {
+        var file = new File([jsonStr], filename, { type: 'application/json' });
+        if (navigator.canShare && navigator.canShare({ files: [file] })) {
+          navigator.share({
+            files: [file],
+            title: 'نسخة احتياطية - ' + (S.appTitle || DEFAULT_TITLE)
+          }).then(function() {
+            say('تمت مشاركة النسخة الاحتياطية بنجاح ✅');
+          }).catch(function() {});
+          return;
+        }
+      } catch (e) {}
+    }
+    exportData();
+  }
+
+  function importData(input) {
+    var file = input && input.files && input.files[0];
+    if (!file) return;
+    var reader = new FileReader();
+    reader.onload = function(ev) {
+      input.value = '';
+      try {
+        var data = JSON.parse(ev.target.result);
+        if (!data || !Array.isArray(data.props)) {
+          say('ملف النسخة الاحتياطية غير صالح', true);
+          return;
+        }
+        if (!confirm('هيتم استبدال كل بيانات الجهاز الحالية بالنسخة المستوردة. متأكد؟')) return;
+        S = {
+          biz: data.biz || '',
+          host: data.host || '',
+          appTitle: data.appTitle || DEFAULT_TITLE,
+          props: data.props,
+          bk: Array.isArray(data.bk) ? data.bk : [],
+          exp: Array.isArray(data.exp) ? data.exp : []
+        };
+        applyAppTitle();
+        save();
+        tab(0);
+        say('تم استيراد النسخة الاحتياطية بنجاح ✅');
+      } catch (e) {
+        say('تعذر قراءة الملف — تأكد من اختيار ملف JSON صحيح', true);
+      }
+      input.value = '';
+    };
+    reader.readAsText(file);
+  }
+
+  // --- التواريخ والأوقات ---
+  function todLabel(t) {
+    if (t === 'am') return 'صباحاً';
+    if (t === 'pm') return 'مساءً';
+    return '';
+  }
+
+  function dt(s) {
+    if (!s) return '';
+    var p = s.split('-');
+    var d = new Date(+p[0], +p[1] - 1, +p[2]);
+    var days = ['الأحد', 'الإثنين', 'الثلاثاء', 'الأربعاء', 'الخميس', 'الجمعة', 'السبت'];
+    return days[d.getDay()] + ' ' + (+p[2]) + '/' + (+p[1]);
+  }
+
+  function rng(a, b, ft, tt) {
+    if (!a && !b) return '';
+    var fPart = a ? ('من ' + dt(a) + (ft ? ' (' + todLabel(ft) + ')' : '')) : '';
+    var tPart = b ? ('ل' + dt(b).replace(/^ال/, 'ل') + (tt ? ' (' + todLabel(tt) + ')' : '')) : '';
+    return (fPart + ' ' + tPart).trim();
+  }
+
+  // --- حساب توافر العقار الذكي ---
+  function getPropAvailability(pid) {
+    var td = todayStr();
+    var active = S.bk.filter(function(b) {
+      return b.pid === pid && b.st === 'ok';
+    }).sort(function(a, b) {
+      return a.from < b.from ? -1 : (a.from > b.from ? 1 : 0);
+    });
+
+    var current = null;
+    for (var i = 0; i < active.length; i++) {
+      if (active[i].from <= td && td < active[i].to) {
+        current = active[i];
+        break;
+      }
+    }
+
+    if (current) {
+      var chainEnd = current.to;
+      var chainEndTod = current.tt || '';
+      var chainCount = 1;
+      var changed = true;
+      while (changed) {
+        changed = false;
+        for (var j = 0; j < active.length; j++) {
+          if (active[j].from === chainEnd) {
+            chainEnd = active[j].to;
+            chainEndTod = active[j].tt || '';
+            chainCount++;
+            changed = true;
+          }
+        }
+      }
+      var nextAfterChain = null;
+      for (var k = 0; k < active.length; k++) {
+        if (active[k].from > chainEnd) {
+          nextAfterChain = active[k];
+          break;
+        }
+      }
+      var freeFromTxt = dt(chainEnd) + (chainEndTod ? ' (' + todLabel(chainEndTod) + ')' : '');
+      var subTxt = 'النزيل الحالي: ' + esc(current.name);
+      if (chainCount > 1) {
+        subTxt += ' · يوجد ' + chainCount + ' حجوزات متتالية، وهتفضى فعلياً يوم <b>' + freeFromTxt + '</b>';
+      } else {
+        subTxt += ' · هتفضى يوم <b>' + freeFromTxt + '</b>';
+      }
+      if (nextAfterChain) {
+        subTxt += '<br>هتبقى فاضية من <b>' + dt(chainEnd) + '</b> لحد <b>' + dt(nextAfterChain.from) + '</b> (' + esc(nextAfterChain.name) + ')';
+      } else {
+        subTxt += '<br>هتبقى فاضية من <b>' + dt(chainEnd) + '</b> ومفيش حجوزات بعدها';
+      }
+      return {
+        busy: true,
+        badge: '🔴 محجوزة النهاردة',
+        detail: subTxt
+      };
+    }
+
+    var upcoming = active.filter(function(b) { return b.from >= td; });
+    if (!upcoming.length) {
+      return {
+        busy: false,
+        badge: '🟢 متاحة النهاردة',
+        detail: 'متاحة — لا توجد حجوزات'
+      };
+    }
+
+    var firstUp = upcoming[0];
+    var upTxt = firstUp.from === td
+      ? ('يبدأ حجز اليوم (' + esc(firstUp.name) + ') حتى <b>' + dt(firstUp.to) + '</b>')
+      : ('فاضية من النهاردة لحد <b>' + dt(firstUp.from) + '</b> (حجز ' + esc(firstUp.name) + ')');
+    return {
+      busy: false,
+      badge: '🟢 متاحة النهاردة',
+      detail: upTxt
+    };
+  }
+
+  // --- شريط تنبيهات اليوم والغد ---
+  function renderTodayAlerts() {
+    var box = $('todayAlerts');
+    if (!box) return;
+    var td = todayStr();
+    var tm = addDaysStr(td, 1);
+    var active = S.bk.filter(function(b) { return b.st === 'ok'; });
+    var items = [];
+
+    var lastBkTs = 0;
+    try { lastBkTs = Number(localStorage.getItem(BACKUP_TS_KEY) || 0); } catch (e) {}
+    var daysSinceBk = lastBkTs ? Math.floor((Date.now() - lastBkTs) / 864e5) : 99;
+    if (active.length > 0 && daysSinceBk >= 3 && (!cloudCfg.url || !cloudCfg.code)) {
+      items.push('<div class="alert-row"><span>🛡️ <b>تذكير أمان:</b> مر ' + (lastBkTs ? daysSinceBk + ' أيام' : 'وقت') + ' بدون نسخة احتياطية</span><button class="b sm" onclick="shareBackupFile()">نسخ سريع</button></div>');
+    }
+
+    active.forEach(function(b) {
+      var rem = b.total - (b.dep || 0);
+      if (b.from === td) {
+        var extra = rem > 0 ? (' · متبقي تحصيل <b>' + fmt(rem) + ' جنيه</b>') : '';
+        items.push('<div class="alert-row"><span>🔑 <b>دخول النهاردة:</b> ' + esc(b.pn) + ' — ' + esc(b.name) + (b.ft ? ' (' + todLabel(b.ft) + ')' : '') + extra + '</span></div>');
+      }
+      if (b.to === td) {
+        var secTxt = (b.sec && !b.secRet) ? (' · يُرد تأمين <b>' + fmt(b.sec) + ' جنيه</b>') : '';
+        items.push('<div class="alert-row"><span>🚪 <b>خروج النهاردة:</b> ' + esc(b.pn) + ' — ' + esc(b.name) + (b.tt ? ' (' + todLabel(b.tt) + ')' : '') + secTxt + '</span></div>');
+      }
+      if (b.from === tm) {
+        items.push('<div class="alert-row"><span>📅 <b>دخول بكرة:</b> ' + esc(b.pn) + ' — ' + esc(b.name) + '</span></div>');
+      }
+    });
+
+    box.innerHTML = items.length ? ('<div class="alert-strip">' + items.join('') + '</div>') : '';
+  }
+
+  // --- التنقل بين التبويبات ---
+  function tab(n) {
+    cur = n;
+    say('');
+    editPropId = '';
+    editBkId = '';
+    payBkId = '';
+    fixPayBkId = '';
+    earlyBkId = '';
+    confirmDelPropId = '';
+    confirmDelBkId = '';
+    confirmCancelBkId = '';
+    for (var i = 0; i <= 5; i++) {
+      var btn = $('t' + i);
+      if (btn) btn.className = (i === n ? 'on' : '');
+    }
+    renderTodayAlerts();
+    var views = [renderProps, renderNewBooking, renderBookings, renderCalendar, renderQuickReceipt, renderFinance];
+    $('v').innerHTML = views[n]();
+    if (n === 1) updateBookingPreview();
+  }
+
+  // ==========================================
+  // 0. تبويب العقارات
+  // ==========================================
+  function renderProps() {
+    var listHtml = S.props.map(function(p) {
+      var av = getPropAvailability(p.id);
+      if (editPropId === p.id) {
+        return '<div class="c" style="border-color:var(--ac)">' +
+          '<b>✏️ تعديل بيانات العقار</b>' +
+          '<label>اسم العقار</label><input id="ep_n" value="' + esc(p.name) + '">' +
+          '<div class="g2">' +
+            '<div><label>النوع</label><select id="ep_ty">' +
+              '<option' + (p.type === 'فيلا' ? ' selected' : '') + '>فيلا</option>' +
+              '<option' + (p.type === 'شقة' ? ' selected' : '') + '>شقة</option>' +
+              '<option' + (p.type === 'شاليه' ? ' selected' : '') + '>شاليه</option>' +
+              '<option' + (p.type === 'استوديو' ? ' selected' : '') + '>استوديو</option>' +
+            '</select></div>' +
+            '<div><label>السعر لليلة</label><input id="ep_pr" type="number" inputmode="numeric" value="' + p.price + '"></div>' +
+          '</div>' +
+          '<div class="g2">' +
+            '<div><label>المدينة / المنطقة</label><input id="ep_ci" value="' + esc(p.city || '') + '"></div>' +
+            '<div><label>المستضيف أو صاحب العقار (اختياري)</label><input id="ep_ho" value="' + esc(p.host || '') + '"></div>' +
+          '</div>' +
+          '<label>رابط اللوكيشن على خرائط جوجل (اختياري)</label>' +
+          '<input id="ep_map" dir="ltr" placeholder="https://maps.google.com/..." value="' + esc(p.mapUrl || '') + '">' +
+          '<label>تعليمات الدخول / كود البوابة / الواي فاي (اختياري)</label>' +
+          '<input id="ep_gd" placeholder="مثال: كود البوابة 1234 - واي فاي: Villa_Net" value="' + esc(p.guide || '') + '">' +
+          '<div class="r" style="margin-top:8px">' +
+            '<button class="b sm" onclick="savePropEdit(\'' + p.id + '\')">حفظ التعديل</button>' +
+            '<button class="b sec sm" onclick="editPropId=\'\';tab(0)">إلغاء</button>' +
+          '</div>' +
+        '</div>';
+      }
+
+      var delConfirmHtml = confirmDelPropId === p.id
+        ? '<div class="inline-panel"><div class="m" style="margin-bottom:8px">هل أنت متأكد من حذف <b>' + esc(p.name) + '</b>؟</div><div style="display:flex;gap:8px"><button class="b g sm" onclick="confirmDeleteProp(\'' + p.id + '\')">نعم، احذف</button><button class="b sec sm" onclick="confirmDelPropId=\'\';tab(0)">تراجع</button></div></div>'
+        : '';
+
+      return '<div class="c">' +
+        '<div class="r">' +
+          '<div><b>' + esc(p.name) + '</b> <span class="tag">' + esc(p.type) + '</span></div>' +
+          '<span class="tag ' + (av.busy ? 'busy-tag' : 'ok-tag') + '">' + av.badge + '</span>' +
+        '</div>' +
+        '<div class="m" style="margin-top:4px">' + (p.city ? esc(p.city) + ' · ' : '') + '<b>' + fmt(p.price) + ' جنيه</b> / ليلة' + (p.host ? ' · المالك: ' + esc(p.host) : '') + '</div>' +
+        '<div class="avail-box">' + av.detail + '</div>' +
+        '<div class="r" style="margin-top:10px">' +
+          '<div style="display:flex;gap:6px;flex-wrap:wrap">' +
+            '<button class="b sm" onclick="goBook(\'' + p.id + '\')">➕ احجز</button>' +
+            '<button class="b sec sm" onclick="cp=\'' + p.id + '\';tab(3)">📅 التقويم</button>' +
+            '<button class="b sec sm" onclick="editPropId=\'' + p.id + '\';tab(0)">✏️ تعديل</button>' +
+          '</div>' +
+          '<button class="b g sm" onclick="confirmDelPropId=\'' + p.id + '\';tab(0)">حذف</button>' +
+        '</div>' +
+        delConfirmHtml +
+      '</div>';
+    }).join('');
+
+    return '<div class="c">' +
+      '<div class="g2">' +
+        '<div><label>اسم النشاط / المكتب (يظهر على الوصل)</label><input id="bz" placeholder="مثال: شركة النخبة للعقارات" value="' + esc(S.biz || '') + '" onchange="S.biz=this.value.trim();save()"></div>' +
+        '<div><label>المستضيف أو صاحب العقار الافتراضي</label><input id="hs" placeholder="مثال: أ. محمد أحمد" value="' + esc(S.host || '') + '" onchange="S.host=this.value.trim();save()"></div>' +
+      '</div>' +
+    '</div>' +
+    listHtml +
+    '<div class="c">' +
+      '<b>➕ إضافة عقار جديد</b>' +
+      '<label style="margin-top:8px">اسم العقار</label><input id="n" placeholder="مثال: شاليه مراسي">' +
+      '<div class="g2">' +
+        '<div><label>النوع</label><select id="ty"><option>فيلا</option><option>شقة</option><option>شاليه</option><option>استوديو</option></select></div>' +
+        '<div><label>السعر لليلة (جنيه)</label><input id="pr" type="number" inputmode="numeric" placeholder="1500"></div>' +
+      '</div>' +
+      '<div class="g2">' +
+        '<div><label>المدينة / المنطقة</label><input id="ci" placeholder="مثال: الساحل الشمالي"></div>' +
+        '<div><label>المستضيف أو صاحب العقار (اختياري)</label><input id="ho" placeholder="اسم المالك"></div>' +
+      '</div>' +
+      '<label>رابط اللوكيشن على خرائط جوجل (اختياري)</label><input id="pmap" dir="ltr" placeholder="https://maps.google.com/...">' +
+      '<label>تعليمات الدخول / كود البوابة / الواي فاي (اختياري)</label><input id="pgd" placeholder="كود البوابة، باسورد الواي فاي...">' +
+      '<button class="b full" onclick="addProp()">إضافة العقار</button>' +
+    '</div>' +
+    '<div class="c">' +
+      '<b>💾 النسخ الاحتياطي الأوفلاين والمزامنة</b>' +
+      '<div class="m" style="margin:4px 0 10px">احفظ نسخة من بياناتك على جهازك أو ابعتها لنفسك على واتساب، أو اربط السحابة من زر (⚙️) بالأعلى.</div>' +
+      '<div style="display:flex;gap:8px;flex-wrap:wrap">' +
+        '<button class="b sm" onclick="exportData()">⬇️ حفظ ملف النسخة</button>' +
+        '<button class="b sec sm" onclick="shareBackupFile()">📤 إرسال لنفسي واتساب / Drive</button>' +
+        '<button class="b sec sm" onclick="$(\'impFile\').click()">⬆️ استيراد نسخة</button>' +
+        '<button class="b sec sm" onclick="toggleSettingsPanel(true)">☁️ إعداد السحابة</button>' +
+        '<input id="impFile" type="file" accept=".json,application/json" style="display:none" onchange="importData(this)">' +
+      '</div>' +
+    '</div>';
+  }
+
+  function goBook(id) {
+    sel = id;
+    pf = '';
+    tab(1);
+  }
+
+  function addProp() {
+    var n = $('n').value.trim();
+    var pr = +$('pr').value;
+    if (!n || pr <= 0) {
+      say('اكتب اسم العقار وسعر الليلة بشكل صحيح', true);
+      return;
+    }
+    S.props.push({
+      id: 'p' + Date.now(),
+      name: n,
+      type: $('ty').value,
+      price: pr,
+      city: $('ci').value.trim(),
+      host: $('ho').value.trim(),
+      mapUrl: $('pmap').value.trim(),
+      guide: $('pgd').value.trim()
+    });
+    save();
+    tab(0);
+    say('تمت إضافة العقار بنجاح ✅');
+  }
+
+  function savePropEdit(id) {
+    var n = $('ep_n').value.trim();
+    var pr = +$('ep_pr').value;
+    if (!n || pr <= 0) {
+      say('اكتب اسم العقار وسعر الليلة بشكل صحيح', true);
+      return;
+    }
+    var city = $('ep_ci').value.trim();
+    var host = $('ep_ho').value.trim();
+    S.props.forEach(function(p) {
+      if (p.id === id) {
+        p.name = n;
+        p.type = $('ep_ty').value;
+        p.price = pr;
+        p.city = city;
+        p.host = host;
+        p.mapUrl = $('ep_map').value.trim();
+        p.guide = $('ep_gd').value.trim();
+      }
+    });
+    S.bk.forEach(function(b) {
+      if (b.pid === id) {
+        b.pn = n;
+        b.pc = city;
+        b.phost = host;
+      }
+    });
+    S.exp.forEach(function(e) { if (e.pid === id) e.pn = n; });
+    editPropId = '';
+    save();
+    tab(0);
+    say('تم تحديث بيانات العقار بنجاح ✅');
+  }
+
+  function confirmDeleteProp(id) {
+    if (S.bk.some(function(b) { return b.pid === id && b.st === 'ok'; })) {
+      confirmDelPropId = '';
+      tab(0);
+      say('هذا العقار عليه حجوزات نشطة — الغِ الحجوزات أولاً', true);
+      return;
+    }
+    S.props = S.props.filter(function(p) { return p.id !== id; });
+    confirmDelPropId = '';
+    save();
+    tab(0);
+    say('تم حذف العقار');
+  }
+
+  // ==========================================
+  // 1. تبويب حجز جديد
+  // ==========================================
+  function renderNewBooking() {
+    if (!S.props.length) {
+      return '<div class="c m">أضف عقاراً أولاً من تبويب العقارات لتتمكن من تسجيل حجز.</div>';
+    }
+    var opts = S.props.map(function(p) {
+      return '<option value="' + p.id + '"' + (p.id === sel ? ' selected' : '') + '>' + esc(p.name) + ' (' + fmt(p.price) + ' جنيه/ليلة)</option>';
+    }).join('');
+    var defFrom = pf || todayStr();
+    var defTo = addDaysStr(defFrom, 2);
+
+    return '<div class="c">' +
+      '<label>العقار</label>' +
+      '<select id="bp" onchange="updateBookingPreview()">' + opts + '</select>' +
+      '<div class="g2">' +
+        '<div>' +
+          '<label>تاريخ الدخول</label>' +
+          '<input id="f" type="date" value="' + defFrom + '" onchange="updateBookingPreview()">' +
+          '<label>موعد الدخول</label>' +
+          '<select id="ft" onchange="updateBookingPreview()"><option value="pm">🌙 بليل (مساءً)</option><option value="am">☀️ الصبح (صباحاً)</option></select>' +
+        '</div>' +
+        '<div>' +
+          '<label>تاريخ الخروج</label>' +
+          '<input id="t" type="date" value="' + defTo + '" onchange="updateBookingPreview()">' +
+          '<label>موعد الخروج</label>' +
+          '<select id="tt" onchange="updateBookingPreview()"><option value="am">☀️ الصبح (صباحاً)</option><option value="pm">🌙 بليل (مساءً)</option></select>' +
+        '</div>' +
+      '</div>' +
+      '<div id="bkCalc" class="calc-box"></div>' +
+      '<label>اسم العميل</label><input id="bn" placeholder="الاسم ثلاثي">' +
+      '<div class="g2">' +
+        '<div><label>رقم الموبايل</label><input id="bt" type="tel" dir="ltr" placeholder="010..."></div>' +
+        '<div><label>عدد الأفراد</label><input id="bg" type="number" value="2" inputmode="numeric"></div>' +
+      '</div>' +
+      '<label>رقم البطاقة القومية / جواز السفر (اختياري)</label><input id="bidnum" dir="ltr" placeholder="اختياري">' +
+      '<div class="g2">' +
+        '<div><label>الديبوزيت المدفوع (من الإيجار)</label><input id="bd" type="number" value="0" inputmode="numeric" oninput="updateBookingPreview()"></div>' +
+        '<div><label>مبلغ التأمين (اختياري - يُرد عند الخروج)</label><input id="bsec" type="number" value="0" inputmode="numeric"></div>' +
+      '</div>' +
+      '<button class="b full" onclick="createBooking()">✅ تأكيد الحجز وإصدار الوصل</button>' +
+    '</div>';
+  }
+
+  function findClash(pid, f, t, ft, tt, ignoreId) {
+    return S.bk.filter(function(b) {
+      if (b.id === ignoreId || b.pid !== pid || b.st !== 'ok') return false;
+      if (f < b.to && t > b.from) return true;
+      if (f === b.to && b.tt === 'pm' && ft === 'am') return true;
+      if (t === b.from && tt === 'pm' && b.ft === 'am') return true;
+      return false;
+    })[0];
+  }
+
+  function updateBookingPreview() {
+    var box = $('bkCalc');
+    if (!box) return;
+    var pid = $('bp') ? $('bp').value : '';
+    var p = S.props.filter(function(x) { return x.id === pid; })[0];
+    var f = $('f') ? $('f').value : '';
+    var t = $('t') ? $('t').value : '';
+    var ft = $('ft') ? $('ft').value : '';
+    var tt = $('tt') ? $('tt').value : '';
+    var dep = +($('bd') ? $('bd').value : 0) || 0;
+    if (!p || !f || !t || t <= f) {
+      box.innerHTML = '<span style="color:var(--er)">اختر تاريخ خروج بعد تاريخ الدخول لحساب الإجمالي.</span>';
+      return;
+    }
+    var nights = Math.round((new Date(t) - new Date(f)) / 864e5);
+    var total = nights * p.price;
+    var rem = Math.max(0, total - dep);
+    var clash = findClash(pid, f, t, ft, tt);
+    var clashHtml = clash
+      ? ('<div style="color:var(--er);font-weight:600;margin-top:4px">⚠️ تعارض: محجوز لـ ' + esc(clash.name) + ' (' + rng(clash.from, clash.to) + ')</div>')
+      : ('<div style="color:var(--ac);font-weight:600;margin-top:4px">✅ الفترة متاحة للحجز</div>');
+    box.innerHTML = 'عدد الليالي: <b>' + nights + ' ليلة</b> · الإجمالي: <b>' + fmt(total) + ' جنيه</b> · المتبقي: <b>' + fmt(rem) + ' جنيه</b>' + clashHtml;
+  }
+
+  function createBooking() {
+    var pid = $('bp').value;
+    var f = $('f').value;
+    var t = $('t').value;
+    var ft = $('ft').value;
+    var tt = $('tt').value;
+    var n = $('bn').value.trim();
+    var ph = $('bt').value.trim();
+    var idNum = $('bidnum').value.trim();
+    var p = S.props.filter(function(x) { return x.id === pid; })[0];
+
+    if (!p || !f || !t || !n || !ph) {
+      say('أكمل البيانات الأساسية (العقار، التواريخ، اسم العميل، والموبايل)', true);
+      return;
+    }
+    if (t <= f) {
+      say('تاريخ الخروج لازم يكون بعد تاريخ الدخول', true);
+      return;
+    }
+    var clash = findClash(pid, f, t, ft, tt);
+    if (clash) {
+      say('العقار محجوز في الفترة دي (' + rng(clash.from, clash.to) + ') باسم ' + clash.name, true);
+      return;
+    }
+    var nights = Math.round((new Date(t) - new Date(f)) / 864e5);
+    var total = nights * p.price;
+    var dep = +$('bd').value || 0;
+    var sec = +$('bsec').value || 0;
+    if (dep < 0 || dep > total) {
+      say('قيمة الديبوزيت غير صحيحة (يجب ألا تتجاوز الإجمالي ' + fmt(total) + ' جنيه)', true);
+      return;
+    }
+    var bid = 'b' + Date.now();
+    S.bk.push({
+      id: bid,
+      pid: pid,
+      pn: p.name,
+      pc: p.city || '',
+      phost: p.host || '',
+      name: n,
+      ph: ph,
+      idNum: idNum,
+      from: f,
+      to: t,
+      ft: ft,
+      tt: tt,
+      g: +$('bg').value || 1,
+      nights: nights,
+      total: total,
+      dep: dep,
+      sec: sec,
+      secRet: false,
+      st: 'ok'
+    });
+    save();
+    sel = '';
+    pf = '';
+    tab(2);
+    openReceipt(bid);
+    say('تم تأكيد الحجز بنجاح (' + nights + ' ليلة) ✅');
+  }
+
+  // ==========================================
+  // 2. تبويب الحجوزات
+  // ==========================================
+  function renderBookings() {
+    var list = S.bk.slice().sort(function(a, b) {
+      return a.from < b.from ? -1 : (a.from > b.from ? 1 : 0);
+    });
+    if (!list.length) {
+      return '<div class="c m">لا توجد حجوزات مسجلة حتى الآن.</div>';
+    }
+
+    var activeList = list.filter(function(b) { return b.st === 'ok'; });
+    var rev = activeList.reduce(function(s, b) { return s + b.total; }, 0);
+    var dp = activeList.reduce(function(s, b) { return s + (b.dep || 0); }, 0);
+    var heldSec = activeList.reduce(function(s, b) { return s + ((b.sec && !b.secRet) ? b.sec : 0); }, 0);
+
+    var filtered = list.filter(function(b) {
+      var rem = b.total - (b.dep || 0);
+      if (bkFilter === 'ok') return b.st === 'ok';
+      if (bkFilter === 'rem') return b.st === 'ok' && rem > 0;
+      if (bkFilter === 'paid') return b.st === 'ok' && rem <= 0;
+      if (bkFilter === 'x') return b.st !== 'ok';
+      return true;
+    });
+
+    var td = todayStr();
+
+    var cardsHtml = filtered.map(function(b) {
+      var isCancelled = b.st !== 'ok';
+      var rem = b.total - (b.dep || 0);
+      var propObj = S.props.filter(function(p) { return p.id === b.pid; })[0];
+
+      var statusTag = isCancelled
+        ? '<span class="tag busy-tag">ملغي</span>'
+        : (rem <= 0
+          ? '<span class="tag ok-tag">خالص · ' + b.nights + ' ليلة</span>'
+          : '<span class="tag warn-tag">متبقي ' + fmt(rem) + ' · ' + b.nights + ' ليلة</span>');
+
+      // لوحة تعديل الحجز
+      if (editBkId === b.id && !isCancelled) {
+        return '<div class="c" style="border-color:var(--ac)">' +
+          '<b>✏️ تعديل الحجز (' + esc(b.pn) + ')</b>' +
+          '<div class="g2" style="margin-top:6px">' +
+            '<div><label>تاريخ الدخول</label><input id="eb_f" type="date" value="' + b.from + '">' +
+            '<select id="eb_ft"><option value="pm"' + (b.ft === 'pm' ? ' selected' : '') + '>🌙 بليل (مساءً)</option><option value="am"' + (b.ft === 'am' ? ' selected' : '') + '>☀️ الصبح (صباحاً)</option></select></div>' +
+            '<div><label>تاريخ الخروج</label><input id="eb_t" type="date" value="' + b.to + '">' +
+            '<select id="eb_tt"><option value="am"' + (b.tt === 'am' ? ' selected' : '') + '>☀️ الصبح (صباحاً)</option><option value="pm"' + (b.tt === 'pm' ? ' selected' : '') + '>🌙 بليل (مساءً)</option></select></div>' +
+          '</div>' +
+          '<label>اسم العميل</label><input id="eb_n" value="' + esc(b.name) + '">' +
+          '<div class="g2">' +
+            '<div><label>الموبايل</label><input id="eb_ph" dir="ltr" value="' + esc(b.ph) + '"></div>' +
+            '<div><label>عدد الأفراد</label><input id="eb_g" type="number" value="' + b.g + '"></div>' +
+          '</div>' +
+          '<label>رقم البطاقة (اختياري)</label><input id="eb_id" dir="ltr" value="' + esc(b.idNum || '') + '">' +
+          '<div class="g2">' +
+            '<div><label>إجمالي الإيجار</label><input id="eb_tot" type="number" value="' + b.total + '"></div>' +
+            '<div><label>مبلغ التأمين (اختياري)</label><input id="eb_sec" type="number" value="' + (b.sec || 0) + '"></div>' +
+          '</div>' +
+          '<div class="r" style="margin-top:6px">' +
+            '<button class="b sm" onclick="saveBookingEdit(\'' + b.id + '\')">حفظ التعديلات</button>' +
+            '<button class="b sec sm" onclick="editBkId=\'\';tab(2)">إلغاء</button>' +
+          '</div>' +
+        '</div>';
+      }
+
+      // لوحة سداد المتبقي (كلي أو جزئي)
+      var payPanel = '';
+      if (payBkId === b.id && !isCancelled && rem > 0) {
+        payPanel = '<div class="inline-panel">' +
+          '<b>💰 سداد المتبقي (' + fmt(rem) + ' جنيه)</b>' +
+          '<div style="display:flex;gap:8px;margin:8px 0;flex-wrap:wrap">' +
+            '<button class="b sm" onclick="payFullRemaining(\'' + b.id + '\')">✅ دفع المتبقي كله (' + fmt(rem) + ' جنيه)</button>' +
+          '</div>' +
+          '<label>أو أدخل جزء من المبلغ دفعه العميل الآن:</label>' +
+          '<div style="display:flex;gap:8px;align-items:center">' +
+            '<input id="partAmt_' + b.id + '" type="number" inputmode="numeric" placeholder="المبلغ المدفوع" style="margin:0">' +
+            '<button class="b sec sm" onclick="payPartialRemaining(\'' + b.id + '\')">تسجيل الجزء</button>' +
+            '<button class="b g sm" onclick="payBkId=\'\';tab(2)">إغلاق</button>' +
+          '</div>' +
+        '</div>';
+      }
+
+      // لوحة تصحيح الدفع في حالة الخطأ
+      var fixPayPanel = '';
+      if (fixPayBkId === b.id && !isCancelled) {
+        fixPayPanel = '<div class="inline-panel">' +
+          '<b>↩️ تصحيح المبلغ المدفوع الفعلي</b>' +
+          '<div class="m" style="margin:4px 0 6px">الإجمالي: ' + fmt(b.total) + ' جنيه · المسجل حالياً: ' + fmt(b.dep || 0) + ' جنيه</div>' +
+          '<div style="display:flex;gap:8px;align-items:center">' +
+            '<input id="fixAmt_' + b.id + '" type="number" inputmode="numeric" value="' + (b.dep || 0) + '" style="margin:0">' +
+            '<button class="b sm" onclick="saveFixedPayment(\'' + b.id + '\')">حفظ التصحيح</button>' +
+            '<button class="b g sm" onclick="fixPayBkId=\'\';tab(2)">إغلاق</button>' +
+          '</div>' +
+        '</div>';
+      }
+
+      // لوحة المغادرة المبكرة
+      var earlyPanel = '';
+      if (earlyBkId === b.id && !isCancelled) {
+        var actualNights = Math.max(1, Math.round((new Date(td) - new Date(b.from)) / 864e5));
+        var unitPrice = b.nights > 0 ? Math.round(b.total / b.nights) : 0;
+        var reducedTotal = actualNights * unitPrice;
+        earlyPanel = '<div class="inline-panel">' +
+          '<b>🚪 تسجيل مغادرة مبكرة اليوم (' + dt(td) + ')</b>' +
+          '<div class="m" style="margin:4px 0 8px">سيتم إنهاء الحجز اليوم لتصبح <b>' + esc(b.pn) + '</b> متاحة فوراً للحجز.</div>' +
+          '<div style="display:flex;gap:6px;flex-wrap:wrap">' +
+            '<button class="b sm" onclick="confirmEarlyCheckout(\'' + b.id + '\', false)">مغادرة مع بقاء الإجمالي (' + fmt(b.total) + ')</button>' +
+            '<button class="b warn sm" onclick="confirmEarlyCheckout(\'' + b.id + '\', true)">مغادرة وحساب ' + actualNights + ' ليلة فقط (' + fmt(reducedTotal) + ')</button>' +
+            '<button class="b sec sm" onclick="earlyBkId=\'\';tab(2)">تراجع</button>' +
+          '</div>' +
+        '</div>';
+      }
+
+      // تأكيد إلغاء الحجز
+      var cancelConfirmPanel = '';
+      if (confirmCancelBkId === b.id && !isCancelled) {
+        cancelConfirmPanel = '<div class="inline-panel">' +
+          '<div class="m" style="margin-bottom:8px">هل تريد إلغاء حجز <b>' + esc(b.name) + '</b>؟</div>' +
+          '<div style="display:flex;gap:8px">' +
+            '<button class="b g sm" onclick="cancelBooking(\'' + b.id + '\')">نعم، إلغاء الحجز</button>' +
+            '<button class="b sec sm" onclick="confirmCancelBkId=\'\';tab(2)">تراجع</button>' +
+          '</div>' +
+        '</div>';
+      }
+
+      // أزرار الحجوزات الملغاة
+      var cancelledActions = '';
+      if (isCancelled) {
+        if (confirmDelBkId === b.id) {
+          cancelledActions = '<div class="inline-panel"><div class="m" style="margin-bottom:8px">حذف هذا الحجز الملغي نهائياً؟</div><div style="display:flex;gap:8px"><button class="b g sm" onclick="deleteBookingForever(\'' + b.id + '\')">نعم، حذف نهائي</button><button class="b sec sm" onclick="confirmDelBkId=\'\';tab(2)">تراجع</button></div></div>';
+        } else {
+          cancelledActions = '<div class="r" style="margin-top:10px">' +
+            '<button class="b sm" onclick="restoreBooking(\'' + b.id + '\')">🔄 إعادة تفعيل الحجز</button>' +
+            '<button class="b g sm" onclick="confirmDelBkId=\'' + b.id + '\';tab(2)">🗑️ حذف نهائي</button>' +
+          '</div>';
+        }
+      }
+
+      var canEarlyCheckout = !isCancelled && b.from < td && td < b.to;
+
+      var actionsHtml = isCancelled ? cancelledActions : (
+        '<div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:10px">' +
+          '<button class="b sm" onclick="openReceipt(\'' + b.id + '\')">🧾 وصل / واتساب</button>' +
+          (rem > 0 ? '<button class="b warn sm" onclick="payBkId=\'' + b.id + '\';fixPayBkId=\'\';tab(2)">💰 سداد المتبقي</button>' : '') +
+          ((b.dep || 0) > 0 ? '<button class="b sec sm" onclick="fixPayBkId=\'' + b.id + '\';payBkId=\'\';tab(2)">↩️ تعديل الدفع</button>' : '') +
+          ((b.sec && !b.secRet) ? '<button class="b sec sm" onclick="returnSecurityDeposit(\'' + b.id + '\')">🔐 رد التأمين (' + fmt(b.sec) + ')</button>' : '') +
+          (canEarlyCheckout ? '<button class="b sec sm" onclick="earlyBkId=\'' + b.id + '\';tab(2)">🚪 مغادرة مبكرة</button>' : '') +
+          '<a class="b sec sm" href="' + buildReminderWhatsApp(b) + '" target="_blank" rel="noopener">💬 تذكير</a>' +
+          ((propObj && (propObj.mapUrl || propObj.guide)) ? '<a class="b sec sm" href="' + buildGuideWhatsApp(b, propObj) + '" target="_blank" rel="noopener">📍 اللوكيشن</a>' : '') +
+          '<button class="b sec sm" onclick="editBkId=\'' + b.id + '\';tab(2)">✏️ تعديل</button>' +
+          '<button class="b g sm" onclick="confirmCancelBkId=\'' + b.id + '\';tab(2)">إلغاء الحجز</button>' +
+        '</div>'
+      );
+
+      return '<div class="c bc' + (isCancelled ? ' x' : '') + '" data-s="' + esc((b.name + ' ' + b.ph + ' ' + b.pn + ' ' + (b.idNum || '')).toLowerCase()) + '">' +
+        '<div class="r"><b class="pn-title">' + esc(b.pn) + '</b>' + statusTag + '</div>' +
+        '<div class="rg">' + rng(b.from, b.to, b.ft, b.tt) + '</div>' +
+        '<div class="k"><span>العميل</span><b>' + esc(b.name) + '</b></div>' +
+        '<div class="k"><span>الموبايل</span><b dir="ltr">' + esc(b.ph) + '</b></div>' +
+        (b.idNum ? '<div class="k"><span>رقم البطاقة</span><b dir="ltr">' + esc(b.idNum) + '</b></div>' : '') +
+        '<div class="k"><span>عدد الأفراد</span><b>' + b.g + '</b></div>' +
+        '<div class="k"><span>الإجمالي</span><b>' + fmt(b.total) + ' جنيه</b></div>' +
+        '<div class="k"><span>المدفوع (ديبوزيت)</span><b>' + fmt(b.dep || 0) + ' جنيه</b></div>' +
+        '<div class="k"><span>المتبقي</span><b style="color:' + (rem > 0 ? 'var(--er)' : 'var(--ac)') + '">' + fmt(rem) + ' جنيه</b></div>' +
+        (b.sec ? '<div class="k"><span>التأمين المسترد</span><b>' + fmt(b.sec) + ' جنيه ' + (b.secRet ? '(✅ تم الرد)' : '(⏳ محتجز)') + '</b></div>' : '') +
+        actionsHtml +
+        payPanel +
+        fixPayPanel +
+        earlyPanel +
+        cancelConfirmPanel +
+      '</div>';
+    }).join('');
+
+    return '<input id="q" placeholder="🔍 ابحث بالاسم أو الموبايل أو رقم البطاقة أو العقار" oninput="filterBookings(this.value)">' +
+      '<div class="filter-pills">' +
+        '<button class="pill' + (bkFilter === 'all' ? ' on' : '') + '" onclick="bkFilter=\'all\';tab(2)">الكل (' + list.length + ')</button>' +
+        '<button class="pill' + (bkFilter === 'ok' ? ' on' : '') + '" onclick="bkFilter=\'ok\';tab(2)">النشطة (' + activeList.length + ')</button>' +
+        '<button class="pill' + (bkFilter === 'rem' ? ' on' : '') + '" onclick="bkFilter=\'rem\';tab(2)">عليه متبقي</button>' +
+        '<button class="pill' + (bkFilter === 'paid' ? ' on' : '') + '" onclick="bkFilter=\'paid\';tab(2)">خالص</button>' +
+        '<button class="pill' + (bkFilter === 'x' ? ' on' : '') + '" onclick="bkFilter=\'x\';tab(2)">الملغاة</button>' +
+      '</div>' +
+      '<div class="c">' +
+        '<div class="r"><span class="m">إجمالي الحجوزات النشطة</span><b>' + fmt(rev) + ' جنيه</b></div>' +
+        '<div class="r" style="margin-top:4px"><span class="m">الديبوزيت المستلم</span><b>' + fmt(dp) + ' جنيه</b></div>' +
+        '<div class="r" style="margin-top:4px"><span class="m">المتبقي تحصيله</span><b style="color:var(--er)">' + fmt(rev - dp) + ' جنيه</b></div>' +
+        (heldSec > 0 ? '<div class="r" style="margin-top:4px"><span class="m">تأمينات محتجزة (تُرد للعملاء)</span><b>' + fmt(heldSec) + ' جنيه</b></div>' : '') +
+      '</div>' +
+      (cardsHtml || '<div class="c m">لا توجد حجوزات تطابق هذا الفلتر.</div>');
+  }
+
+  function filterBookings(val) {
+    val = val.trim().toLowerCase();
+    document.querySelectorAll('.bc').forEach(function(el) {
+      el.style.display = el.dataset.s.indexOf(val) < 0 ? 'none' : '';
+    });
+  }
+
+  function findBooking(id) {
+    return S.bk.filter(function(b) { return b.id === id; })[0];
+  }
+
+  function payFullRemaining(id) {
+    var b = findBooking(id);
+    if (!b) return;
+    b.dep = b.total;
+    payBkId = '';
+    save();
+    tab(2);
+    say('تم تسجيل سداد كامل المبلغ بنجاح ✅');
+  }
+
+  function payPartialRemaining(id) {
+    var b = findBooking(id);
+    if (!b) return;
+    var inp = $('partAmt_' + id);
+    var amt = inp ? (+inp.value || 0) : 0;
+    var rem = b.total - (b.dep || 0);
+    if (amt <= 0 || amt > rem) {
+      say('أدخل مبلغاً صحيحاً لا يتجاوز المتبقي (' + fmt(rem) + ' جنيه)', true);
+      return;
+    }
+    b.dep = (b.dep || 0) + amt;
+    payBkId = '';
+    save();
+    tab(2);
+    say('تم تسجيل دفع ' + fmt(amt) + ' جنيه · المتبقي الآن ' + fmt(b.total - b.dep) + ' جنيه ✅');
+  }
+
+  function saveFixedPayment(id) {
+    var b = findBooking(id);
+    if (!b) return;
+    var inp = $('fixAmt_' + id);
+    var amt = inp ? (+inp.value || 0) : 0;
+    if (amt < 0 || amt > b.total) {
+      say('المبلغ يجب أن يكون بين 0 و ' + fmt(b.total) + ' جنيه', true);
+      return;
+    }
+    b.dep = amt;
+    fixPayBkId = '';
+    save();
+    tab(2);
+    say('تم تصحيح المبلغ المدفوع بنجاح ✅');
+  }
+
+  function returnSecurityDeposit(id) {
+    var b = findBooking(id);
+    if (!b) return;
+    b.secRet = true;
+    save();
+    tab(2);
+    say('تم تسجيل رد مبلغ التأمين (' + fmt(b.sec) + ' جنيه) للعميل ✅');
+  }
+
+  function confirmEarlyCheckout(id, adjustTotal) {
+    var b = findBooking(id);
+    if (!b) return;
+    var td = todayStr();
+    if (td <= b.from || td >= b.to) {
+      say('المغادرة المبكرة متاحة فقط أثناء فترة الإقامة الحالية', true);
+      return;
+    }
+    var actualNights = Math.max(1, Math.round((new Date(td) - new Date(b.from)) / 864e5));
+    if (adjustTotal) {
+      var unitPrice = b.nights > 0 ? Math.round(b.total / b.nights) : 0;
+      b.total = actualNights * unitPrice;
+      if ((b.dep || 0) > b.total) b.dep = b.total;
+    }
+    b.to = td;
+    b.nights = actualNights;
+    earlyBkId = '';
+    save();
+    tab(2);
+    say('تم تسجيل المغادرة المبكرة وأصبح العقار متاحاً الآن ✅');
+  }
+
+  function saveBookingEdit(id) {
+    var b = findBooking(id);
+    if (!b) return;
+    var f = $('eb_f').value;
+    var t = $('eb_t').value;
+    var n = $('eb_n').value.trim();
+    var ph = $('eb_ph').value.trim();
+    var tot = +$('eb_tot').value || 0;
+    if (!f || !t || !n || !ph || t <= f || tot < 0) {
+      say('تأكد من إدخال التواريخ والبيانات والمبالغ بشكل صحيح', true);
+      return;
+    }
+    var clash = findClash(b.pid, f, t, $('eb_ft').value, $('eb_tt').value, id);
+    if (clash) {
+      say('يوجد تعارض مع حجز آخر (' + rng(clash.from, clash.to) + ') باسم ' + clash.name, true);
+      return;
+    }
+    var oldNights = b.nights, oldTotal = b.total;
+    b.from = f;
+    b.to = t;
+    b.ft = $('eb_ft').value;
+    b.tt = $('eb_tt').value;
+    b.name = n;
+    b.ph = ph;
+    b.g = +$('eb_g').value || 1;
+    b.idNum = $('eb_id').value.trim();
+    b.nights = Math.round((new Date(t) - new Date(f)) / 864e5);
+    b.total = tot;
+    if ((b.dep || 0) > b.total) b.dep = b.total;
+    b.sec = +$('eb_sec').value || 0;
+    editBkId = '';
+    save();
+    tab(2);
+    say('تم تعديل بيانات الحجز بنجاح ✅' + ((b.nights !== oldNights && b.total === oldTotal) ? ' — تنبيه: عدد الليالي اتغير والإجمالي زي ما هو، راجعه' : ''));
+  }
+
+  function cancelBooking(id) {
+    var b = findBooking(id);
+    if (!b) return;
+    b.st = 'x';
+    confirmCancelBkId = '';
+    save();
+    tab(2);
+    say('تم إلغاء الحجز');
+  }
+
+  function restoreBooking(id) {
+    var b = findBooking(id);
+    if (!b) return;
+    var clash = findClash(b.pid, b.from, b.to, b.ft, b.tt, id);
+    if (clash) {
+      say('لا يمكن إعادة التفعيل لوجود حجز متعارض (' + rng(clash.from, clash.to) + ') باسم ' + clash.name, true);
+      return;
+    }
+    b.st = 'ok';
+    save();
+    tab(2);
+    say('تمت إعادة تفعيل الحجز بنجاح ✅');
+  }
+
+  function deleteBookingForever(id) {
+    S.bk = S.bk.filter(function(b) { return b.id !== id; });
+    confirmDelBkId = '';
+    save();
+    tab(2);
+    say('تم حذف الحجز نهائياً');
+  }
+
+  // ==========================================
+  // 3. تبويب التقويم (فردي + نظرة شاملة)
+  // ==========================================
+  function renderCalendar() {
+    if (!S.props.length) {
+      return '<div class="c m">أضف عقاراً أولاً لعرض التقويم.</div>';
+    }
+    var modeSwitch = '<div class="filter-pills">' +
+      '<button class="pill' + (calMode === 'single' ? ' on' : '') + '" onclick="calMode=\'single\';tab(3)">📅 تقويم عقار محدد</button>' +
+      '<button class="pill' + (calMode === 'all' ? ' on' : '') + '" onclick="calMode=\'all\';tab(3)">📊 نظرة شاملة لكل العقارات</button>' +
+    '</div>';
+
+    if (calMode === 'all') {
+      return modeSwitch + renderTimelineAll();
+    }
+
+    if (!S.props.some(function(p) { return p.id === cp; })) cp = S.props[0].id;
+    var av = getPropAvailability(cp);
+
+    var y = Math.floor(cm / 12);
+    var m = cm % 12;
+    var st = (new Date(y, m, 1).getDay() + 1) % 7;
+    var dn = new Date(y, m + 1, 0).getDate();
+    var mn = ['يناير', 'فبراير', 'مارس', 'أبريل', 'مايو', 'يونيو', 'يوليو', 'أغسطس', 'سبتمبر', 'أكتوبر', 'نوفمبر', 'ديسمبر'];
+    var wd = ['سبت', 'أحد', 'إثنين', 'ثلاثاء', 'أربعاء', 'خميس', 'جمعة'];
+
+    var opts = S.props.map(function(p) {
+      return '<option value="' + p.id + '"' + (p.id === cp ? ' selected' : '') + '>' + esc(p.name) + '</option>';
+    }).join('');
+
+    var bs = S.bk.filter(function(b) { return b.pid === cp && b.st === 'ok'; });
+    var ts = todayStr();
+
+    var grid = wd.map(function(w) { return '<div class="h">' + w + '</div>'; }).join('');
+    for (var i = 0; i < st; i++) grid += '<div class="e"></div>';
+
+    for (var d = 1; d <= dn; d++) {
+      var ds = y + '-' + pd(m + 1) + '-' + pd(d);
+      var bb = bs.filter(function(b) { return b.from <= ds && ds < b.to; })[0];
+      var isTd = (ds === ts) ? ' td' : '';
+      if (bb) {
+        grid += '<div class="bk' + isTd + '" onclick="showCalBookingInfo(\'' + bb.id + '\')">' + d + '</div>';
+      } else {
+        grid += '<div class="' + isTd.trim() + '" onclick="pickCalDay(\'' + ds + '\')">' + d + '</div>';
+      }
+    }
+
+    return modeSwitch +
+      '<div class="c">' +
+        '<select id="cs" onchange="cp=this.value;tab(3)">' + opts + '</select>' +
+        '<div class="avail-box" style="margin-bottom:10px"><b>' + av.badge + '</b> · ' + av.detail + '</div>' +
+        '<div class="r"><button class="b sec sm" onclick="cm--;tab(3)">السابق</button><b>' + mn[m] + ' ' + y + '</b><button class="b sec sm" onclick="cm++;tab(3)">التالي</button></div>' +
+        '<div class="cal">' + grid + '</div>' +
+        '<div class="m" style="margin-top:10px">الأيام الملونة محجوزة. اضغط على يوم فاضي لبدء حجز، أو على يوم ملون لعرض التفاصيل.</div>' +
+      '</div>';
+  }
+
+  function renderTimelineAll() {
+    if (!tlStart) tlStart = todayStr();
+    var days = [];
+    for (var i = 0; i < 7; i++) days.push(addDaysStr(tlStart, i));
+
+    var headCells = '<th>العقار</th>' + days.map(function(ds) {
+      return '<th>' + dt(ds).replace(' ', '<br>') + '</th>';
+    }).join('');
+
+    var rowsHtml = S.props.map(function(p) {
+      var bs = S.bk.filter(function(b) { return b.pid === p.id && b.st === 'ok'; });
+      var cells = days.map(function(ds) {
+        var bb = bs.filter(function(b) { return b.from <= ds && ds < b.to; })[0];
+        if (bb) {
+          return '<td class="tl-busy" onclick="showCalBookingInfo(\'' + bb.id + '\')">' + esc(bb.name.split(' ')[0]) + '</td>';
+        }
+        return '<td class="tl-free" onclick="cp=\'' + p.id + '\';pickCalDay(\'' + ds + '\')">متاح</td>';
+      }).join('');
+      return '<tr><td class="tl-prop">' + esc(p.name) + '</td>' + cells + '</tr>';
+    }).join('');
+
+    return '<div class="c">' +
+      '<div class="r">' +
+        '<button class="b sec sm" onclick="tlStart=addDaysStr(tlStart,-7);tab(3)">الأسبوع السابق</button>' +
+        '<b>جدول 7 أيام</b>' +
+        '<button class="b sec sm" onclick="tlStart=addDaysStr(tlStart,7);tab(3)">الأسبوع التالي</button>' +
+      '</div>' +
+      '<div class="tl-wrap"><table class="tl-table"><thead><tr>' + headCells + '</tr></thead><tbody>' + rowsHtml + '</tbody></table></div>' +
+      '<div class="m" style="margin-top:8px">اضغط على أي خانة "متاح" لبدء حجز سريع، أو على اسم العميل لعرض تفاصيل الحجز.</div>' +
+    '</div>';
+  }
+
+  function pickCalDay(ds) {
+    sel = cp;
+    pf = ds;
+    tab(1);
+  }
+
+  function showCalBookingInfo(id) {
+    var b = findBooking(id);
+    if (!b) return;
+    var rem = b.total - (b.dep || 0);
+    $('msg').innerHTML = '<div class="msg ok" style="color:var(--tx)">' +
+      '<div class="r"><b>' + esc(b.pn) + '</b><button class="b sm" onclick="openReceipt(\'' + b.id + '\')">🧾 الوصل</button></div>' +
+      '<div class="rg">' + rng(b.from, b.to, b.ft, b.tt) + '</div>' +
+      '<div class="k"><span>العميل</span><b>' + esc(b.name) + '</b></div>' +
+      '<div class="k"><span>الموبايل</span><b dir="ltr">' + esc(b.ph) + '</b></div>' +
+      '<div class="k"><span>المدفوع</span><b>' + fmt(b.dep || 0) + ' جنيه</b></div>' +
+      '<div class="k"><span>المتبقي</span><b>' + fmt(rem) + ' جنيه</b></div>' +
+    '</div>';
+  }
+
+  // ==========================================
+  // 4. تبويب وصل سريع (جميع الخانات اختيارية)
+  // ==========================================
+  function renderQuickReceipt() {
+    var d = quickReceiptData || {
+      pn: '',
+      name: '',
+      idNum: '',
+      ph: '',
+      from: '',
+      ft: '',
+      to: '',
+      tt: '',
+      paid: '',
+      rem: '',
+      sec: '',
+      host: S.host || ''
+    };
+    return '<div class="c">' +
+      '<b>🧾 إصدار وصل فندقي سريع</b>' +
+      '<div class="m" style="margin:4px 0 10px">جميع الخانات اختيارية — اكتب البيانات المتوفرة لديك فقط لإصدار وصل فوري دون تسجيله في جدول الحجوزات.</div>' +
+      '<label>اسم العقار / الوحدة (اختياري)</label><input id="qr_pn" placeholder="مثال: فيلا الساحل" value="' + esc(d.pn) + '">' +
+      '<div class="g2">' +
+        '<div><label>اسم العميل (اختياري)</label><input id="qr_name" placeholder="اسم العميل" value="' + esc(d.name) + '"></div>' +
+        '<div><label>رقم البطاقة (اختياري)</label><input id="qr_id" dir="ltr" placeholder="رقم البطاقة" value="' + esc(d.idNum) + '"></div>' +
+      '</div>' +
+      '<label>رقم الموبايل (اختياري - للإرسال واتساب)</label><input id="qr_ph" type="tel" dir="ltr" placeholder="010..." value="' + esc(d.ph) + '">' +
+      '<div class="g2">' +
+        '<div>' +
+          '<label>تاريخ الوصول (اختياري)</label><input id="qr_f" type="date" value="' + esc(d.from) + '">' +
+          '<select id="qr_ft"><option value="">بدون تحديد وقت</option><option value="am"' + (d.ft === 'am' ? ' selected' : '') + '>☀️ الصبح (صباحاً)</option><option value="pm"' + (d.ft === 'pm' ? ' selected' : '') + '>🌙 بليل (مساءً)</option></select>' +
+        '</div>' +
+        '<div>' +
+          '<label>تاريخ الخروج (اختياري)</label><input id="qr_t" type="date" value="' + esc(d.to) + '">' +
+          '<select id="qr_tt"><option value="">بدون تحديد وقت</option><option value="am"' + (d.tt === 'am' ? ' selected' : '') + '>☀️ الصبح (صباحاً)</option><option value="pm"' + (d.tt === 'pm' ? ' selected' : '') + '>🌙 بليل (مساءً)</option></select>' +
+        '</div>' +
+      '</div>' +
+      '<div class="g2">' +
+        '<div><label>المبلغ المدفوع (اختياري)</label><input id="qr_paid" type="number" inputmode="numeric" placeholder="0" value="' + esc(d.paid) + '"></div>' +
+        '<div><label>المبلغ المتبقي (اختياري)</label><input id="qr_rem" type="number" inputmode="numeric" placeholder="0" value="' + esc(d.rem) + '"></div>' +
+      '</div>' +
+      '<div class="g2">' +
+        '<div><label>التأمين المسترد (اختياري)</label><input id="qr_sec" type="number" inputmode="numeric" placeholder="0" value="' + esc(d.sec) + '"></div>' +
+        '<div><label>المستضيف أو صاحب العقار (اختياري)</label><input id="qr_host" placeholder="اسم المالك" value="' + esc(d.host) + '"></div>' +
+      '</div>' +
+      '<div style="display:flex;gap:8px;margin-top:6px">' +
+        '<button class="b full" onclick="generateQuickReceipt()">🧾 إنشاء الوصل الآن</button>' +
+        '<button class="b sec" onclick="quickReceiptData=null;tab(4)">مسح</button>' +
+      '</div>' +
+    '</div>';
+  }
+
+  function generateQuickReceipt() {
+    quickReceiptData = {
+      pn: $('qr_pn').value.trim(),
+      name: $('qr_name').value.trim(),
+      idNum: $('qr_id').value.trim(),
+      ph: $('qr_ph').value.trim(),
+      from: $('qr_f').value,
+      ft: $('qr_ft').value,
+      to: $('qr_t').value,
+      tt: $('qr_tt').value,
+      paid: $('qr_paid').value.trim(),
+      rem: $('qr_rem').value.trim(),
+      sec: $('qr_sec').value.trim(),
+      host: $('qr_host').value.trim()
+    };
+    var paidNum = quickReceiptData.paid !== '' ? (+quickReceiptData.paid || 0) : null;
+    var remNum = quickReceiptData.rem !== '' ? (+quickReceiptData.rem || 0) : null;
+    var secNum = quickReceiptData.sec !== '' ? (+quickReceiptData.sec || 0) : null;
+    var nights = 0;
+    if (quickReceiptData.from && quickReceiptData.to && quickReceiptData.to > quickReceiptData.from) {
+      nights = Math.round((new Date(quickReceiptData.to) - new Date(quickReceiptData.from)) / 864e5);
+    }
+    var fakeObj = {
+      id: 'q' + Date.now(),
+      isQuick: true,
+      pn: quickReceiptData.pn,
+      name: quickReceiptData.name,
+      idNum: quickReceiptData.idNum,
+      ph: quickReceiptData.ph,
+      from: quickReceiptData.from,
+      to: quickReceiptData.to,
+      ft: quickReceiptData.ft,
+      tt: quickReceiptData.tt,
+      nights: nights,
+      total: (paidNum !== null || remNum !== null) ? ((paidNum || 0) + (remNum || 0)) : null,
+      dep: paidNum,
+      remOverride: remNum,
+      sec: secNum,
+      phost: quickReceiptData.host
+    };
+    renderReceiptScreen(fakeObj, true);
+  }
+
+  // ==========================================
+  // 5. تبويب الحسابات والمصاريف
+  // ==========================================
+  function renderFinance() {
+    var activeBk = S.bk.filter(function(b) { return b.st === 'ok'; });
+    var totalRev = activeBk.reduce(function(s, b) { return s + b.total; }, 0);
+    var totalCollected = activeBk.reduce(function(s, b) { return s + (b.dep || 0); }, 0);
+    var totalExp = S.exp.reduce(function(s, e) { return s + (e.amt || 0); }, 0);
+    var netProfit = totalRev - totalExp;
+    var cashNet = totalCollected - totalExp;
+
+    var propOpts = '<option value="all">مصروف عام (لكل العقارات)</option>' + S.props.map(function(p) {
+      return '<option value="' + p.id + '">' + esc(p.name) + '</option>';
+    }).join('');
+
+    var propSummary = S.props.map(function(p) {
+      var pRev = activeBk.filter(function(b) { return b.pid === p.id; }).reduce(function(s, b) { return s + b.total; }, 0);
+      var pExp = S.exp.filter(function(e) { return e.pid === p.id; }).reduce(function(s, e) { return s + (e.amt || 0); }, 0);
+      return '<div class="k"><span>' + esc(p.name) + ' (دخل ' + fmt(pRev) + ' - مصاريف ' + fmt(pExp) + ')</span><b style="color:' + ((pRev - pExp) >= 0 ? 'var(--ac)' : 'var(--er)') + '">' + fmt(pRev - pExp) + ' جنيه</b></div>';
+    }).join('');
+
+    var expList = S.exp.slice().reverse().map(function(e) {
+      return '<div class="k">' +
+        '<span><b>' + esc(e.title) + '</b> (' + esc(e.pn || 'عام') + ' · ' + dt(e.date) + ')</span>' +
+        '<div style="display:flex;align-items:center;gap:8px"><b style="color:var(--er)">-' + fmt(e.amt) + '</b><button class="b g sm" style="padding:2px 7px" onclick="delExpense(\'' + e.id + '\')">✕</button></div>' +
+      '</div>';
+    }).join('');
+
+    return '<div class="c">' +
+      '<b>📊 ملخص الأرباح والمصاريف</b>' +
+      '<div class="k" style="margin-top:8px"><span>إجمالي قيمة الحجوزات النشطة</span><b>' + fmt(totalRev) + ' جنيه</b></div>' +
+      '<div class="k"><span>المحصّل فعلياً (الديبوزيت)</span><b>' + fmt(totalCollected) + ' جنيه</b></div>' +
+      '<div class="k"><span>إجمالي المصاريف</span><b style="color:var(--er)">' + fmt(totalExp) + ' جنيه</b></div>' +
+      '<div class="k"><span>صافي الربح (الإجمالي - المصاريف)</span><b style="color:' + (netProfit >= 0 ? 'var(--ac)' : 'var(--er)') + '">' + fmt(netProfit) + ' جنيه</b></div>' +
+      '<div class="k"><span>صافي السيولة باليد (المحصّل - المصاريف)</span><b>' + fmt(cashNet) + ' جنيه</b></div>' +
+    '</div>' +
+    '<div class="c">' +
+      '<b>🏢 صافي ربح كل عقار</b>' +
+      '<div style="margin-top:6px">' + (propSummary || '<div class="m">لا توجد عقارات</div>') + '</div>' +
+    '</div>' +
+    '<div class="c">' +
+      '<b>➕ تسجيل مصروف جديد</b>' +
+      '<label style="margin-top:6px">العقار</label><select id="ex_p">' + propOpts + '</select>' +
+      '<div class="g2">' +
+        '<div><label>بند المصروف</label><input id="ex_t" placeholder="مثال: تنظيف، صيانة، كهرباء"></div>' +
+        '<div><label>المبلغ (جنيه)</label><input id="ex_a" type="number" inputmode="numeric" placeholder="250"></div>' +
+      '</div>' +
+      '<label>التاريخ</label><input id="ex_d" type="date" value="' + todayStr() + '">' +
+      '<button class="b full" onclick="addExpense()">إضافة المصروف</button>' +
+    '</div>' +
+    '<div class="c">' +
+      '<b>🧾 سجل المصاريف</b>' +
+      '<div style="margin-top:6px">' + (expList || '<div class="m">لا توجد مصاريف مسجلة بعد.</div>') + '</div>' +
+    '</div>';
+  }
+
+  function addExpense() {
+    var pid = $('ex_p').value;
+    var title = $('ex_t').value.trim();
+    var amt = +$('ex_a').value || 0;
+    var date = $('ex_d').value || todayStr();
+    if (!title || amt <= 0) {
+      say('اكتب بند المصروف والمبلغ بشكل صحيح', true);
+      return;
+    }
+    var prop = S.props.filter(function(p) { return p.id === pid; })[0];
+    S.exp.push({
+      id: 'e' + Date.now(),
+      pid: pid,
+      pn: prop ? prop.name : 'مصروف عام',
+      title: title,
+      amt: amt,
+      date: date
+    });
+    save();
+    tab(5);
+    say('تم تسجيل المصروف بنجاح ✅');
+  }
+
+  function delExpense(id) {
+    S.exp = S.exp.filter(function(e) { return e.id !== id; });
+    save();
+    tab(5);
+    say('تم حذف المصروف');
+  }
+
+  // ==========================================
+  // إصدار الوصل الفندقي المصور ورسائل واتساب
+  // ==========================================
+  function formatWhatsAppPhone(rawPh) {
+    var p = String(rawPh || '').replace(/\D/g, '');
+    if (!p) return '';
+    if (p.slice(0, 2) === '00') p = p.slice(2);
+    else if (p.charAt(0) === '0') p = '20' + p.slice(1);
+    return p;
+  }
+
+  function buildWhatsAppUrl(b) {
+    var p = formatWhatsAppPhone(b.ph);
+    var hostName = b.phost || S.host || '';
+    var dateTxt = rng(b.from, b.to, b.ft, b.tt);
+    var lines = [
+      (S.biz ? S.biz + ' — ' : '') + 'حجز فندق ✅'
+    ];
+    if (b.pn) lines.push('العقار: ' + b.pn);
+    if (b.name) lines.push('العميل: ' + b.name);
+    if (b.idNum) lines.push('رقم البطاقة: ' + b.idNum);
+    if (dateTxt) lines.push('الموعد: ' + dateTxt + (b.nights ? ' (' + b.nights + ' ليلة)' : ''));
+
+    if (b.isQuick) {
+      if (b.dep !== null && b.dep !== undefined) lines.push('المدفوع: ' + fmt(b.dep) + ' جنيه');
+      if (b.remOverride !== null && b.remOverride !== undefined) lines.push('المتبقي: ' + fmt(b.remOverride) + ' جنيه');
+      if (b.sec) lines.push('التأمين المسترد: ' + fmt(b.sec) + ' جنيه');
+    } else {
+      lines.push('الإجمالي: ' + fmt(b.total) + ' جنيه');
+      lines.push('الديبوزيت المدفوع: ' + fmt(b.dep || 0) + ' جنيه');
+      lines.push('المتبقي: ' + fmt(b.total - (b.dep || 0)) + ' جنيه');
+      if (b.sec) lines.push('التأمين المسترد: ' + fmt(b.sec) + ' جنيه');
+    }
+    if (hostName) lines.push('المستضيف أو صاحب العقار: ' + hostName);
+
+    var text = encodeURIComponent(lines.join('\n'));
+    return p ? ('https://wa.me/' + p + '?text=' + text) : ('https://wa.me/?text=' + text);
+  }
+
+  function buildReminderWhatsApp(b) {
+    var p = formatWhatsAppPhone(b.ph);
+    var rem = b.total - (b.dep || 0);
+    var lines = [
+      'أهلاً أ/ ' + b.name + ' 🌷',
+      'نذكركم بموعد حجزكم في ' + b.pn + ' يوم ' + dt(b.from) + (b.ft ? ' (' + todLabel(b.ft) + ')' : '') + '.'
+    ];
+    if (rem > 0) lines.push('المبلغ المتبقي عند الاستلام: ' + fmt(rem) + ' جنيه.');
+    lines.push('في انتظار تشريفكم ونتمنى لكم إقامة سعيدة ✨');
+    return (p ? 'https://wa.me/' + p : 'https://wa.me/') + '?text=' + encodeURIComponent(lines.join('\n'));
+  }
+
+  function buildGuideWhatsApp(b, prop) {
+    var p = formatWhatsAppPhone(b.ph);
+    var lines = [
+      'بيانات الوصول والدخول — ' + prop.name + ' 📍'
+    ];
+    if (prop.mapUrl) lines.push('اللوكيشن على الخريطة:\n' + prop.mapUrl);
+    if (prop.guide) lines.push('تعليمات الدخول / الواي فاي:\n' + prop.guide);
+    return (p ? 'https://wa.me/' + p : 'https://wa.me/') + '?text=' + encodeURIComponent(lines.join('\n\n'));
+  }
+
+  function renderReceiptCanvas(b) {
+    var F = 'system-ui, -apple-system, Tahoma, sans-serif';
+    var W = 820;
+    var scale = 2;
+    var rows = [];
+
+    if (b.name) rows.push(['العميل', b.name]);
+    if (b.ph) rows.push(['الموبايل', b.ph]);
+    if (b.idNum) rows.push(['رقم البطاقة', b.idNum]);
+    if (!b.isQuick && b.g) rows.push(['عدد الأفراد', String(b.g)]);
+    if (b.nights > 0) rows.push(['عدد الليالي', b.nights + ' ليلة']);
+
+    if (b.isQuick) {
+      if (b.dep !== null && b.dep !== undefined) rows.push(['المبلغ المدفوع', fmt(b.dep) + ' جنيه']);
+      if (b.remOverride !== null && b.remOverride !== undefined) rows.push(['المتبقي', fmt(b.remOverride) + ' جنيه', true]);
+      if (b.sec) rows.push(['التأمين (يُرد عند الخروج)', fmt(b.sec) + ' جنيه']);
+    } else {
+      rows.push(['الإجمالي', fmt(b.total) + ' جنيه']);
+      rows.push(['الديبوزيت المدفوع', fmt(b.dep || 0) + ' جنيه']);
+      rows.push(['المتبقي', fmt(b.total - (b.dep || 0)) + ' جنيه', true]);
+      if (b.sec) rows.push(['التأمين (يُرد عند الخروج)', fmt(b.sec) + ' جنيه']);
+    }
+
+    var hostName = b.phost || S.host || '';
+    var hasPropTitle = Boolean(b.pn);
+    var hasCity = Boolean(b.pc);
+    var dateStr = rng(b.from, b.to, b.ft, b.tt);
+    var hasDate = Boolean(dateStr);
+
+    var curY = 205;
+    var propY = 0;
+    var cityY = 0;
+    var dateY = 0;
+
+    if (hasPropTitle) { propY = curY; curY += 40; }
+    if (hasCity) { cityY = curY; curY += 34; }
+    if (hasDate) { dateY = curY + 6; curY += 54; }
+    if (!hasPropTitle && !hasCity && !hasDate) curY = 225;
+
+    var startY = curY + 38;
+    var hostBlockH = hostName ? 85 : 0;
+    var H = startY + rows.length * 68 + hostBlockH + 85;
+
+    var c = document.createElement('canvas');
+    c.width = W * scale;
+    c.height = H * scale;
+    var x = c.getContext('2d');
+    x.scale(scale, scale);
+
+    // خلفية فندقية فاخرة بتدرج هادئ
+    var bgGrad = x.createLinearGradient(0, 0, 0, H);
+    bgGrad.addColorStop(0, '#fdfbf7');
+    bgGrad.addColorStop(1, '#f4efe6');
+    x.fillStyle = bgGrad;
+    x.fillRect(0, 0, W, H);
+
+    // نقش هندسي خفيف في الخلفية
+    x.strokeStyle = 'rgba(180, 142, 74, 0.08)';
+    x.lineWidth = 1;
+    for (var gx = 30; gx < W; gx += 48) {
+      x.beginPath();
+      x.moveTo(gx, 165);
+      x.lineTo(gx, H - 20);
+      x.stroke();
+    }
+
+    // إطار ذهبي مزدوج
+    x.strokeStyle = '#c59b48';
+    x.lineWidth = 3;
+    x.strokeRect(14, 14, W - 28, H - 28);
+    x.strokeStyle = 'rgba(197, 155, 72, 0.45)';
+    x.lineWidth = 1;
+    x.strokeRect(22, 22, W - 44, H - 44);
+
+    // الترويسة الفندقية الزمردية الداكنة
+    var hdrGrad = x.createLinearGradient(0, 0, W, 165);
+    hdrGrad.addColorStop(0, '#0a4f4a');
+    hdrGrad.addColorStop(1, '#116962');
+    x.fillStyle = hdrGrad;
+    x.fillRect(14, 14, W - 28, 155);
+
+    // شريط ذهبي أسفل الترويسة
+    x.fillStyle = '#c59b48';
+    x.fillRect(14, 165, W - 28, 5);
+
+    x.direction = 'rtl';
+    x.textAlign = 'right';
+
+    // عنوان الترويسة
+    x.fillStyle = '#ffffff';
+    x.font = 'bold 38px ' + F;
+    x.fillText(S.biz ? S.biz : 'حجز فندق', W - 46, 78, W - 92);
+
+    x.fillStyle = '#f3d999';
+    x.font = 'bold 23px ' + F;
+    x.fillText('حجز فندق · رقم #' + String(b.id).slice(-5), W - 46, 126);
+
+    // بيانات العقار والتاريخ
+    if (hasPropTitle) {
+      x.fillStyle = '#162420';
+      x.font = 'bold 34px ' + F;
+      x.fillText(b.pn, W - 46, propY, W - 92);
+    }
+    if (hasCity) {
+      x.fillStyle = '#5c6b66';
+      x.font = '23px ' + F;
+      x.fillText(b.pc, W - 46, cityY, W - 92);
+    }
+    if (hasDate) {
+      x.fillStyle = '#0f766e';
+      x.font = 'bold 25px ' + F;
+      x.fillText(dateStr, W - 46, dateY, W - 92);
+    }
+
+    // جدول التفاصيل
+    rows.forEach(function(r, i) {
+      var y = startY + i * 68;
+      var isAlert = Boolean(r[2]);
+      x.strokeStyle = '#dfd7c8';
+      x.lineWidth = 1.2;
+      x.beginPath();
+      x.moveTo(46, y - 42);
+      x.lineTo(W - 46, y - 42);
+      x.stroke();
+
+      x.textAlign = 'right';
+      x.fillStyle = '#5c6b66';
+      x.font = '24px ' + F;
+      x.fillText(r[0], W - 46, y, 380);
+
+      x.textAlign = 'left';
+      x.fillStyle = isAlert ? '#b42318' : '#162420';
+      x.font = 'bold 26px ' + F;
+      x.fillText(r[1], 46, y, 320);
+    });
+
+    // قسم المستضيف أو صاحب العقار
+    if (hostName) {
+      var hy = startY + rows.length * 68 + 10;
+      x.strokeStyle = '#c59b48';
+      x.lineWidth = 1.2;
+      x.beginPath();
+      x.moveTo(46, hy - 22);
+      x.lineTo(W - 46, hy - 22);
+      x.stroke();
+
+      x.textAlign = 'right';
+      x.fillStyle = '#5c6b66';
+      x.font = '22px ' + F;
+      x.fillText('المستضيف أو صاحب العقار:', W - 46, hy + 16, 380);
+
+      x.textAlign = 'left';
+      x.fillStyle = '#0a4f4a';
+      x.font = 'bold 26px ' + F;
+      x.fillText(hostName, 46, hy + 16, 300);
+    }
+
+    // تذييل الوصل
+    x.textAlign = 'center';
+    x.fillStyle = '#7a7265';
+    x.font = '21px ' + F;
+    x.fillText('شكراً لاختياركم · نتمنى لكم إقامة سعيدة', W / 2, H - 36);
+
+    return c;
+  }
+
+  var currentReceiptObj = null;
+
+  function openReceipt(id) {
+    var b = findBooking(id);
+    if (!b) return;
+    renderReceiptScreen(b, false);
+  }
+
+  function renderReceiptScreen(b, isQuick) {
+    currentReceiptObj = b;
+    var canvas = renderReceiptCanvas(b);
+    var dataUrl = canvas.toDataURL('image/png');
+    var backBtn = isQuick
+      ? '<button class="b sec full" style="margin-top:10px" onclick="tab(4)">رجوع للوصل السريع</button>'
+      : '<button class="b sec full" style="margin-top:10px" onclick="tab(2)">رجوع للحجوزات</button>';
+
+    $('v').innerHTML = '<div class="c">' +
+      '<img alt="حجز فندق" style="width:100%;border:1px solid var(--bd);border-radius:12px;display:block" src="' + dataUrl + '">' +
+      '<div class="g2" style="margin-top:12px">' +
+        '<button class="b" onclick="saveCurrentReceipt()">💾 حفظ الصورة</button>' +
+        '<button class="b sec" onclick="shareCurrentReceipt()">📤 مشاركة الوصل</button>' +
+      '</div>' +
+      '<a class="b full" style="margin-top:8px" href="' + buildWhatsAppUrl(b) + '" target="_blank" rel="noopener">💬 إرسال تفاصيل الحجز واتساب</a>' +
+      '<div class="m" style="margin-top:10px;font-size:12.5px">استخدم <b>"مشاركة الوصل"</b> لإرسال الصورة مباشرة لتطبيق واتساب على الهاتف، أو اضغط مطولاً على الصورة لحفظها.</div>' +
+      backBtn +
+    '</div>';
+  }
+
+  function saveCurrentReceipt() {
+    if (!currentReceiptObj) return;
+    var canvas = renderReceiptCanvas(currentReceiptObj);
+    var filename = 'hotel-booking-' + String(currentReceiptObj.id).slice(-5) + '.png';
+    try {
+      var a = document.createElement('a');
+      a.href = canvas.toDataURL('image/png');
+      a.download = filename;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      say('تم حفظ صورة الوصل (' + filename + ') ✅');
+    } catch (e) {
+      say('اضغط مطولاً على الصورة واختر حفظ الصورة', true);
+    }
+  }
+
+  function shareCurrentReceipt() {
+    if (!currentReceiptObj) return;
+    var canvas = renderReceiptCanvas(currentReceiptObj);
+    var filename = 'hotel-booking-' + String(currentReceiptObj.id).slice(-5) + '.png';
+    canvas.toBlob(function(blob) {
+      if (blob && navigator.share) {
+        try {
+          var file = new File([blob], filename, { type: 'image/png' });
+          if (navigator.canShare && navigator.canShare({ files: [file] })) {
+            navigator.share({
+              files: [file],
+              title: 'حجز فندق'
+            }).catch(function() {});
+            return;
+          }
+        } catch (e) {}
+      }
+      saveCurrentReceipt();
+    }, 'image/png');
+  }
+
+  // --- تشغيل التطبيق ---
+  if ('serviceWorker' in navigator && location.protocol.indexOf('http') === 0) {
+    window.addEventListener('load', function() { navigator.serviceWorker.register('sw.js').catch(function() {}); });
+  }
+  initTheme();
+  requestPersistentStorage();
+  loadCloudConfig();
+  loadState();
+  tab(0);
+</script>
+</body>
+</html>
